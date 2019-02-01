@@ -19,6 +19,7 @@ endif
 app/busybox/install:
 	make -j4 -C ./app/busybox/busybox-1.22.1/ CROSS_COMPILE=$(CROSS_COMPILE) install
 	cp -raf ./app/busybox/busybox-1.22.1/_install/* $(ROOTFSDIR)
+	sudo tar -xjf ./app/busybox/files.tar.bz2 -C $(ROOTFSDIR)
 	sudo cp -raf ./app/busybox/files/* $(ROOTFSDIR)
 	@cp $(BUILDDIR)/lib/ld-linux-armhf.so.3 $(ROOTFSDIR)/lib
 	@$(STRIP) $(ROOTFSDIR)/lib/ld-linux-armhf.so.3
