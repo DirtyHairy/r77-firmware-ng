@@ -1,0 +1,3 @@
+[submodule "app/stella/stella"]
+	path = app/stella/stella
+	url = https://github.com/stella-emu/stella.git
