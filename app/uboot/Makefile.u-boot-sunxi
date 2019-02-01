@@ -1,0 +1,33 @@
+#VERSION:=OrangePiH3_uboot
+UBOOT_CONFIG:=orangepi_lite_defconfig
+
+uboot:
+	@echo "uboot config"
+
+app/uboot/compile:
+	@echo "uboot compile"
+ifeq (,$(wildcard app/uboot/u-boot-sunxi/.config))
+	@echo "create uboot .config"
+	make -C app/uboot/u-boot-sunxi $(UBOOT_CONFIG)
+endif
+	@echo "Compiling uboot"
+	make -j$(CORES) -C app/uboot/u-boot-sunxi ARCH=$(ARCH) CROSS_COMPILE=${CROSS_COMPILE} V=$(VERBOSE)
+	make app/uboot/install
+
+app/uboot/menuconfig:
+	@echo "uboot menuconfig"
+	make -j4 -C app/uboot/u-boot-sunxi/ CROSS_COMPILE=$(CROSS_COMPILE) menuconfig
+
+app/uboot/install:
+	@echo "uboot install"
+	@cp app/uboot/u-boot-sunxi/u-boot-sunxi-with-spl.bin $(OUTDIR)
+	@cp app/uboot/config/boot.scr $(OUTDIR)
+	@cp app/uboot/external/Legacy_patch/orange/script.bin.OPI-lite_720p60_hdmi $(OUTDIR)/script.bin
+
+app/uboot/clean:
+	@echo "uboot clean"
+	make ARCH=$(ARCH) -C app/uboot/u-boot-sunxi/ CROSS_COMPILE=$(CROSS_COMPILE) clean
+
+app/uboot/distclean:
+	@echo "uboot distclean"
+	make ARCH=$(ARCH) -C app/uboot/u-boot-sunxi/ CROSS_COMPILE=$(CROSS_COMPILE) distclean

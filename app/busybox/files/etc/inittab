@@ -1,0 +1,4 @@
+::sysinit:/etc/init.d/rcS
+ttyS0::respawn:-/bin/sh
+tty1::respawn:-/bin/sh
+::ctrlaltdel:/bin/umount -a -
