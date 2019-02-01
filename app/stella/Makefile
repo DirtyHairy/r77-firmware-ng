@@ -1,5 +1,4 @@
-STELLA_VERSION:=stella-3.7.5
-STELLA_CONFIG:=app/stella/$(STELLA_VERSION)/config.mak
+STELLA_CONFIG:=app/stella/stella/config.mak
 
 
 stella:
@@ -23,13 +22,13 @@ ifeq (,$(wildcard $(STELLA_CONFIG)))
 	--force-builtin-zlib
 endif
 	@echo "stella all CROSS_COMPILE="$(CROSS_COMPILE)
-	make -j$(CORES) -C ./app/stella/stella-3.7.5/ V=$(VERBOSE)
+	make -j$(CORES) -C ./app/stella/stella/ V=$(VERBOSE)
 	make app/stella/install
 
 app/stella/install:
 	@echo "stella install"
-	@cp app/stella/stella-3.7.5/stella $(BUILDDIR)/usr/bin
-	@cp app/stella/stella-3.7.5/stella $(ROOTFSDIR)/usr/bin
+	@cp app/stella/stella/stella $(BUILDDIR)/usr/bin
+	@cp app/stella/stella/stella $(ROOTFSDIR)/usr/bin
 	@$(STRIP) $(ROOTFSDIR)/usr/bin/stella
 
 app/stella/menuconfig:
@@ -37,8 +36,8 @@ app/stella/menuconfig:
 
 app/stella/clean:
 	@echo "stella clean"
-	make -C ./app/stella/stella-3.7.5/ clean
+	make -C ./app/stella/stella/ clean
 
 app/stella/distclean:
 	@echo "stella distclean"
-	make -C ./app/stella/stella-3.7.5/ distclean
+	make -C ./app/stella/stella/ distclean
