@@ -8,7 +8,6 @@ include ./lib/zlib/Makefile
 include ./app/stella/Makefile
 include ./kernel/armbian-linux/Makefile
 include ./app/dumper/Makefile
-include ./app/alsa-utils/Makefile
 
 all:
 	@echo "TOP Makefile"
