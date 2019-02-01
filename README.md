@@ -19,14 +19,6 @@ changes made my Remowilliams to build the community firmware image on
 
 # Omissions
 
-## Licensing issues
-
-The following parts have been ommitted from this repository because of unclear
-licensing terms. Please copy them from the original Hyperkin source drop:
-
- * `app/dumper`
- * `tools/allwinner-pack-tools`
-
 ## Toolchain
 
 The toolchain is huge and can be readily downloaded from Linaro. You'll
@@ -48,4 +40,5 @@ Provided all tools are installed, a `make install` will build the firmware.
 
 # License
 
-Please refer to the licenses of the included packages for details.
+Please refer to the licenses of the included packages for details. The dumper
+source is adapted from the Hyperkin source drop.

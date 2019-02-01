@@ -5,6 +5,8 @@ mount -t tmpfs udev /dev
 mount -t tmpfs tmpfs /run
 mount -t tmpfs tmpfs /tmp
 
+echo /sbin/mdev > /proc/sys/kernel/hotplug
 /sbin/mdev -s
-mount -t msdos -o rw,sync,nodev,nosuid /dev/mmcblk0p1 /mnt
+#mount -t msdos -o rw,sync,nodev,nosuid /dev/mmcblk0p1 /mnt
+mount -t vfat -o rw,sync,nodev,nosuid /dev/mmcblk0p1 /mnt
 /usr/bin/dumper&

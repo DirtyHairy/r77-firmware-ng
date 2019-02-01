@@ -1,6 +1,4 @@
 /toolchain
-/tools/allwinner-pack-tools
-/app/dumper
 /out
 
 SDL_config.h
