@@ -11,7 +11,7 @@ changes made my Remowilliams to build the community firmware image on
 * The kernel has been patched to include the kernel side Mali drivers, taken from
   the official OrangePi H3
   [kernel](https://github.com/orangepi-xunlong/OrangePiH3_kernel)
-  (version r3p0 as there is a matching blob with an usable license)).
+  (version r3p0 as there is a matching blob with an usable license).
 * The build system and kernel have been patched to build with the current
   Linaro gcc 7.4 gnueabihf toolchain.
 * The build system has been cleaned up, the Hyperkin gui removed, and libpng
@@ -22,7 +22,9 @@ changes made my Remowilliams to build the community firmware image on
 ## Toolchain
 
 The toolchain is huge and can be readily downloaded from Linaro. You'll
-need the GCC 7.4 gnueabihf toolchain to build this version of the firmware. The build
+need the
+[GCC 7.4 gnueabihf toolchain](http://releases.linaro.org/components/toolchain/binaries/7.4-2019.02/)
+to build this version of the firmware. The build
 system expects the toolchain at `toolchain/toolchain` and the sysroot at
 `toolchain/sysroot-glibc`.
 
