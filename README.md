@@ -23,7 +23,7 @@ changes made my Remowilliams to build the community firmware image on
 
 The toolchain is huge and can be readily downloaded from Linaro. You'll
 need the
-[GCC 7.4 gnueabihf toolchain](http://releases.linaro.org/components/toolchain/binaries/7.4-2019.02/arm-linux-gnueabihf/)
+[gcc 7.4 gnueabihf toolchain](http://releases.linaro.org/components/toolchain/binaries/7.4-2019.02/arm-linux-gnueabihf/)
 to build this version of the firmware. The build
 system expects the toolchain at `toolchain/toolchain` and the sysroot at
 `toolchain/sysroot-glibc`.
