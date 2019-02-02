@@ -38,7 +38,7 @@ to fetch it.
 The firmware builds fine in a Debian docker container (you'll have to install
 a bunch of packages first, though). 
 
-Provided all tools are installed, a `make install` will build the firmware.
+Provided all tools are installed, `make install` will build the firmware.
 
 # License
 
