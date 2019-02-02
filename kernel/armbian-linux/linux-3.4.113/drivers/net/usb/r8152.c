@@ -30,6 +30,8 @@
 #define DRIVER_DESC "Realtek RTL8152/RTL8153 Based USB Ethernet Adapters"
 #define MODULENAME "r8152"
 
+#undef CONFIG_PM
+
 #define R8152_PHY_ID		32
 
 #define PLA_IDR			0xc000
