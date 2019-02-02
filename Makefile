@@ -28,7 +28,7 @@ clean:
 	make app/uboot/clean
 	make lib/alsa/clean
 	make lib/sdl/clean
-	makw lib/zlib/clean
+	make lib/zlib/clean
 	make lib/png/clean
 	make app/stella/clean
 	make app/dumper/clean
