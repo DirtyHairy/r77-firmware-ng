@@ -17,7 +17,7 @@ changes made my Remowilliams to build the community firmware image on
 * The build system has been cleaned up, the Hyperkin gui removed, and libpng
   and libz are now integrated into the main build.
 
-# Omissions
+# Setup
 
 ## Toolchain
 
@@ -26,19 +26,26 @@ need the
 [gcc 7.4 gnueabihf toolchain](http://releases.linaro.org/components/toolchain/binaries/7.4-2019.02/arm-linux-gnueabihf/)
 to build this version of the firmware. The build
 system expects the toolchain at `toolchain/toolchain` and the sysroot at
-`toolchain/sysroot-glibc`.
+`toolchain/sysroot-glibc`. As an alternative, you can set the `TOOLCHAIN`
+environment variable to point to the directory containing toolchain and sysroot.
 
 ## Stella
 
-Stella has been integrated as a git submodule. Please do a `git submodule init`
-to fetch it.
+Stella has been integrated as a git submodule. Follow the build instructions below
+to make sure that all submodules are properly checked out.
 
 # Building
 
-The firmware builds fine in a Debian docker container (you'll have to install
-a bunch of packages first, though). 
+After checkout, make sure that all submodules are checked out by running
+`git submodule update --init`. After that, the build process is initiated
+by running `make`. If all goes well, you will find the output in the `out`
+subdirectory. You can specify an alternate output directory by setting the
+`OUTDIR` environment variable.
 
-Provided all tools are installed, `make` will build the firmware.
+## Docker build environment
+
+You can find a Dockerfile for setting up a Debian-based build environment
+[here](https://github.com/DirtyHairy/r77-firmware-ng-build/tree/master).
 
 # License
 
