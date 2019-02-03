@@ -1,5 +1,8 @@
 TOPDIR:=${CURDIR}
-OUTDIR:=$(TOPDIR)/out
+
+OUTDIR ?= $(TOPDIR)/out
+TOOLCHAIN ?= $(TOPDIR)/toolchain
+
 BUILDDIR:=$(OUTDIR)/build_root
 ROOTFSDIR:=$(OUTDIR)/rootfs
 OUT_SDK_DIR:=$(BUILDDIR)/usr
@@ -25,7 +28,7 @@ VERBOSE:=$(V)
 VERBOSE?=0
 CORES:=$(shell grep -c ^processor /proc/cpuinfo)
 
-path:=${TOPDIR}/toolchain/toolchain/bin:$(TOPDIR)/tools/sunxi-tools:${PATH}
+path:=$(TOOLCHAIN)/toolchain/bin:$(TOPDIR)/tools/sunxi-tools:${PATH}
 PATH:=${path}
 
 LICHEE_PLATFORM:=linux
@@ -48,7 +51,7 @@ ifeq (,$(wildcard $(BUILDDIR)))
 	@echo "making out/build_root/ folder"
 	@mkdir -p $(BUILDDIR)
 	@echo "copying sysroot-glibc"
-	@cp -raf ${TOPDIR}/toolchain/sysroot-glibc/* ${BUILDDIR}
+	@cp -raf $(TOOLCHAIN)/sysroot-glibc/* ${BUILDDIR}
 endif
 ifeq (,$(wildcard $(ROOTFSDIR)))
 	@mkdir -p $(ROOTFSDIR)
