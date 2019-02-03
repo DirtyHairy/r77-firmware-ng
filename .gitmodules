@@ -1,3 +1,6 @@
 [submodule "app/stella/stella"]
 	path = app/stella/stella
 	url = https://github.com/stella-emu/stella.git
+[submodule "app/dropbear"]
+	path = app/dropbear
+	url = https://github.com/mkj/dropbear.git
