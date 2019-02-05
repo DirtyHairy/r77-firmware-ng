@@ -1,18 +1,24 @@
 PNG_VERSION:=1.2.56
-PNG_DIR:=lib/libpng/libpng-$(PNG_VERSION)
-PNG_MAKEFILE:=$(PNG_DIR)/Makefile
+PNG_DIR:=$(TOPDIR)/lib/libpng/libpng-$(PNG_VERSION)
+PNG_WORKDIR:=$(WORKDIR_BASE)/libpng
+PNG_MAKEFILE:=$(PNG_WORKDIR)/Makefile
 
 png:
 	@echo "png config"
 
 lib/png/compile:
 	@echo "png compile"
+	-mkdir -p $(PNG_WORKDIR)
 ifeq (,$(wildcard $(PNG_MAKEFILE)))
-	cd $(PNG_DIR)/ && \
-	LDFLAGS=-L$(BUILDDIR)/lib CFLAGS=-I$(BUILDDIR)/usr/include ./configure \
-	--host=arm-linux --enable-shared
+	cd $(PNG_WORKDIR) && $(PNG_DIR)/configure \
+		CFLAGS="$(CFLAGS) -I$(BUILDDIR)/include" \
+		CPPFLAGS="$(CPPFLAGS) -I$(BUILDDIR)/include" \
+		LDFLAGS="$(LDFLAGS) -L$(BUILDDIR)/lib" \
+		--prefix=$(BUILDDIR) \
+		--host=arm-linux \
+		--enable-shared
 endif
-	make -j$(CORES) -C $(PNG_DIR)/ CROSS_COMPILE=$(CROSS_COMPILE) V=$(VERBOSE) LDFLAGS=-L$(BUILDDIR)/lib CFLAGS=-I$(BUILDDIR)/usr/include CPPFLAGS=-I$(BUILDDIR)/usr/include
+	make -j$(CORES) -C$(PNG_WORKDIR) CROSS_COMPILE=$(CROSS_COMPILE) V=$(VERBOSE)
 	make lib/png/install
 
 lib/png/menuconfig:
@@ -22,24 +28,22 @@ lib/png/clean:
 	@echo "png clean"
 ifeq (,$(wildcard $(PNG_MAKEFILE)))
 else
-	make -j$(CORES) -C $(PNG_DIR)/ CROSS_COMPILE=$(CROSS_COMPILE) V=$(VERBOSE) clean
+	make -C$(PNG_WORKDIR) clean
 endif
 	@rm -f $(ROOTFSDIR)/lib/libpng.so
 	@rm -f $(BUILDDIR)/lib/libpng.so
 
 lib/png/install:
 	@echo "png install"
-	@mkdir -p  $(BUILDDIR)/usr/include/
-	@cp -raf $(PNG_DIR)/png.h $(BUILDDIR)/usr/include/
-	@cp -raf $(PNG_DIR)/pngconf.h $(BUILDDIR)/usr/include/
-	@cp -raf $(PNG_DIR)/.libs/libpng*.so* $(BUILDDIR)/lib
-	@cp -raf $(PNG_DIR)/.libs/libpng*.so* $(ROOTFSDIR)/lib
-	@$(STRIP) $(ROOTFSDIR)/lib/libpng12.so.0.56.0
-	@$(STRIP) $(ROOTFSDIR)/lib/libpng.so.3.56.0
+	make -C$(PNG_WORKDIR) install
+	cp -raf $(BUILDDIR)/lib/libpng*so* $(ROOTFSDIR)/lib
+	$(STRIP) $(ROOTFSDIR)/lib/libpng12.so
+	$(STRIP) $(ROOTFSDIR)/lib/libpng.so
 	
 lib/png/distclean:
 	@echo "png distclean"
 ifeq (,$(wildcard $(PNG_MAKEFILE)))
 else
-	make -j$(CORES) -C $(PNG_DIR)/ CROSS_COMPILE=$(CROSS_COMPILE) V=$(VERBOSE) distclean
+	make -C$(PNG_WORKDIR) distclean
 endif
+	-rm -fr $(PNG_WORKDIR)

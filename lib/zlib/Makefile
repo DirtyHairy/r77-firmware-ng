@@ -1,16 +1,18 @@
 ZLIB_VERSION:=zlib-1.2.11
-ZLIB_MAKEFILE:=lib/zlib/$(ZLIB_VERSION)/Makefile
+ZLIB_WORKDIR:=$(WORKDIR_BASE)/zlib
+ZLIB_DIR:=$(TOPDIR)/lib/zlib/$(ZLIB_VERSION)
+ZLIB_MAKEFILE:=$(ZLIB_WORKDIR)/Makefile
 
 zlib:
 	@echo "zlib config"
 
 lib/zlib/compile:
 	@echo "zlib compile"
+	-mkdir -p $(ZLIB_WORKDIR)
 ifeq (,$(wildcard $(ZLIB_MAKEFILE)))
-	cd lib/zlib/$(ZLIB_VERSION)/ && \
-	./configure
+	cd $(ZLIB_WORKDIR) && $(ZLIB_DIR)/configure --prefix=$(BUILDDIR)
 endif
-	make -j$(CORES) -C lib/zlib/$(ZLIB_VERSION)/ CROSS_COMPILE=$(CROSS_COMPILE) V=$(VERBOSE)
+	make -j$(CORES) -C$(ZLIB_WORKDIR) CROSS_COMPILE=$(CROSS_COMPILE) V=$(VERBOSE)
 	make lib/zlib/install
 
 lib/zlib/menuconfig:
@@ -18,19 +20,14 @@ lib/zlib/menuconfig:
 
 lib/zlib/clean:
 	@echo "zlib clean"
-	make -j$(CORES) -C lib/zlib/$(ZLIB_VERSION)/ CROSS_COMPILE=$(CROSS_COMPILE) clean
+	make $(ZLIB_WORKDIR) clean
 
 lib/zlib/install:
 	@echo "zlib install"
-	@cp -raf lib/zlib/$(ZLIB_VERSION)/zconf.h $(BUILDDIR)/usr/include
-	@cp -raf lib/zlib/$(ZLIB_VERSION)/zlib.h $(BUILDDIR)/usr/include
-	@cp -raf lib/zlib/$(ZLIB_VERSION)/libz*.so* $(BUILDDIR)/lib
-	@cp -raf lib/zlib/$(ZLIB_VERSION)/libz*.so* $(ROOTFSDIR)/lib
-	@$(STRIP) $(ROOTFSDIR)/lib/libz.so.1.2.11
+	make -C$(ZLIB_WORKDIR) install
+	cp -raf $(BUILDDIR)/lib/libz*so* $(ROOTFSDIR)/lib
+	$(STRIP) $(ROOTFSDIR)/lib/libz.so
 
 lib/zlib/distclean:
 	@echo "zlib distclean"
-ifneq (,$(wildcard $(ZLIB_MAKEFILE)))
-	make -j4 -C lib/zlib/$(ZLIB_VERSION)/ CROSS_COMPILE=$(CROSS_COMPILE) distclean
-	rm -rf lib/zlib/$(ZLIB_VERSION)/Makefile
-endif
+	-rm -fr $(ZLIB_WORKDIR)

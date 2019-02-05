@@ -31,7 +31,7 @@ PROFILE :=
 HAVE_GCC = 1
 HAVE_GCC3 = 1
 
-INCLUDES += $(TARGET_C_INCLUDES) -I$(OUT_SDK_DIR)/include -I$(OUT_SDK_DIR)/include/SDL -Isrc/emucore -Isrc/common -Isrc/common/tv_filters -Isrc/gui  -Isrc/unix -Isrc/unix/r77
+INCLUDES += -I$(BUILDDIR)/include -I$(BUILDDIR)/include/SDL -Isrc/emucore -Isrc/common -Isrc/common/tv_filters -Isrc/gui  -Isrc/unix -Isrc/unix/r77
 OBJS +=
 DEFINES +=  -DBSPF_UNIX -DUNIX -DRETRON77 -DHAVE_GETTIMEOFDAY -DHAVE_INTTYPES -DSOUND_SUPPORT -DSNAPSHOT_SUPPORT -DJOYSTICK_SUPPORT -DTHUMB_SUPPORT
 LDFLAGS += $(TARGET_GLOBAL_LDFLAGS) -L$(BUILDDIR)/lib -lSDL -lgcc_s -lm -lpthread -lpng -lz

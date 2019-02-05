@@ -48,4 +48,4 @@ kernel/armbian-linux/install:
 kernel/armbian-linux/distclean:
 	@echo "kernel distclean"
 	cd kernel/armbian-linux/linux-3.4.113/ && \
-	make O=$(OUTDIR)/kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILE} distclean
+	make O=$(OUTDIR)/kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILE} mrproper

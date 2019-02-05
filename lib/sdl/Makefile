@@ -1,15 +1,18 @@
 SDL_VERSION:=SDL-1.2.15
-SDL_MAKEFILE:=lib/sdl/SDL-1.2.15/Makefile
+SDL_WORKDIR:=$(WORKDIR_BASE)/sdl
+SDL_DIR:=$(TOPDIR)/lib/sdl/$(SDL_VERSION)
+SDL_MAKEFILE:=$(SDL_WORKDIR)/Makefile
 
 sdl:
 	@echo "SDL config"
 
 lib/sdl/compile:
 	@echo "lib SDL compile"
+	-mkdir -p $(SDL_WORKDIR)
 ifeq (,$(wildcard $(SDL_MAKEFILE)))
-	cd lib/sdl/SDL-1.2.15/ && \
-	./configure \
+	cd $(SDL_WORKDIR) && $(SDL_DIR)/configure \
 	--host=arm-linux \
+	--prefix=$(BUILDDIR) \
 	--enable-libc \
 	--enable-video \
 	--enable-events \
@@ -87,7 +90,7 @@ ifeq (,$(wildcard $(SDL_MAKEFILE)))
 	--with-alsa-prefix=$(BUILDDIR)/lib \
 	--with-alsa-inc-prefix=$(BUILDDIR)/usr/include
 endif
-	make -j$(CORES) -C ./lib/sdl/SDL-1.2.15/ CROSS_COMPILE=$(CROSS_COMPILE) V=$(VERBOSE)
+	make -j$(CORES) -C$(SDL_WORKDIR) CROSS_COMPILE=$(CROSS_COMPILE) V=$(VERBOSE)
 	make lib/sdl/install
 
 lib/sdl/menuconfig:
@@ -97,20 +100,19 @@ lib/sdl/clean:
 	@echo "lib sdl clean"
 ifeq (,$(wildcard $(SDL_MAKEFILE)))
 else
-	make -j4 -C ./lib/sdl/SDL-1.2.15/ CROSS_COMPILE=$(CROSS_COMPILE) clean
+	make -C(SDL_WORKDIR) clean
 endif
 
 lib/sdl/install:
 	@echo "lib SDL install"
-	@mkdir -p $(BUILDDIR)/usr/include/SDL
-	@cp -raf ./lib/sdl/SDL-1.2.15/include/* $(BUILDDIR)/usr/include/SDL
-	@cp -raf ./lib/sdl/SDL-1.2.15/build/.libs/libSDL*.so* $(BUILDDIR)/lib
-	@cp -raf ./lib/sdl/SDL-1.2.15/build/.libs/libSDL*.so* $(ROOTFSDIR)/lib
-	@$(STRIP) $(ROOTFSDIR)/lib/libSDL-1.2.so.0.11.4
+	make -C$(SDL_WORKDIR) install
+	cp -raf $(BUILDDIR)/lib/libSDL*so* $(ROOTFSDIR)/lib
+	@$(STRIP) $(ROOTFSDIR)/lib/libSDL.so
 
 lib/sdl/distclean:
 	@echo "lib SDL distclean"
 ifeq (,$(wildcard $(SDL_MAKEFILE)))
 else
-	make -j4 -C ./lib/sdl/SDL-1.2.15/ CROSS_COMPILE=$(CROSS_COMPILE) distclean
+	make -C$(SDL_WORKDIR) distclean
 endif
+	-rm -fr $(SDL_WORKDIR)
