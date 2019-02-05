@@ -7,6 +7,9 @@ mount -t tmpfs tmpfs /tmp
 
 echo /sbin/mdev > /proc/sys/kernel/hotplug
 /sbin/mdev -s
-#mount -t msdos -o rw,sync,nodev,nosuid /dev/mmcblk0p1 /mnt
+
 mount -t vfat -o rw,sync,nodev,nosuid /dev/mmcblk0p1 /mnt
+
+ifup -a
+
 /usr/bin/dumper&
