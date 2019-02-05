@@ -10,7 +10,7 @@ lib/zlib/compile:
 	@echo "zlib compile"
 	-mkdir -p $(ZLIB_WORKDIR)
 ifeq (,$(wildcard $(ZLIB_MAKEFILE)))
-	cd $(ZLIB_WORKDIR) && $(ZLIB_DIR)/configure --prefix=$(BUILDDIR)
+	cd $(ZLIB_WORKDIR) && CFLAGS="$(CFLAGS) -I." $(ZLIB_DIR)/configure --prefix=$(BUILDDIR)
 endif
 	make -j$(CORES) -C$(ZLIB_WORKDIR) CROSS_COMPILE=$(CROSS_COMPILE) V=$(VERBOSE)
 	make lib/zlib/install
