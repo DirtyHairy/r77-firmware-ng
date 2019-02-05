@@ -92,16 +92,16 @@ Currently available applets include:
 	kill, killall, killall5, less, ln, logname, losetup, ls, lsmod,
 	lsof, lsusb, lzop, lzopcat, md5sum, mdev, mesg, mkdir, mkdosfs,
 	mkfifo, mkfs.vfat, mknod, mktemp, modinfo, modprobe, more, mount,
-	mpstat, mv, nc, netstat, nice, nohup, nslookup, od, passwd, pidof,
-	ping, pkill, pmap, poweroff, powertop, printenv, printf, ps, pstree,
-	pwd, pwdx, rdate, readlink, realpath, reboot, remove-shell, renice,
-	reset, rm, rmdir, rmmod, route, run-parts, sed, seq, setserial, sh,
-	sha1sum, sha256sum, sha3sum, sha512sum, sleep, sort, split,
-	start-stop-daemon, stat, stty, sum, switch_root, sync, sysctl, tac,
-	tail, tar, tee, test, time, top, touch, tr, traceroute, true, tty,
-	udhcpc, umount, uname, unexpand, uniq, unix2dos, unlzop, uptime,
-	users, usleep, uudecode, uuencode, vi, wc, wget, which, who, whoami,
-	whois, yes, zcat
+	mpstat, mv, netstat, nice, nohup, nslookup, od, passwd, pidof, ping,
+	ping6, pkill, pmap, poweroff, powertop, printenv, printf, ps,
+	pstree, pwd, pwdx, rdate, readlink, realpath, reboot, remove-shell,
+	renice, reset, rm, rmdir, rmmod, route, run-parts, sed, seq,
+	setserial, sh, sha1sum, sha256sum, sha3sum, sha512sum, sleep, sort,
+	split, start-stop-daemon, stat, stty, sum, switch_root, sync,
+	sysctl, tac, tail, tar, tee, test, time, top, touch, tr, traceroute,
+	traceroute6, true, tty, udhcpc, umount, uname, unexpand, uniq,
+	unix2dos, unlzop, uptime, users, usleep, uudecode, uuencode, vi, wc,
+	wget, which, who, whoami, whois, yes, zcat
 
 =head1 COMMAND DESCRIPTIONS
 
@@ -832,6 +832,8 @@ ifconfig [-a] interface [address]
 
 Configure a network interface
 
+	[add ADDRESS[/PREFIXLEN]]
+	[del ADDRESS[/PREFIXLEN]]
 	[[-]broadcast [ADDRESS]] [[-]pointopoint [ADDRESS]]
 	[netmask ADDRESS] [dstaddr ADDRESS]
 	[outfill NN] [keepalive NN]
@@ -1303,20 +1305,6 @@ Rename SOURCE to DEST, or move SOURCE(s) to DIRECTORY
 	-i	Interactive, prompt before overwrite
 	-n	Don't overwrite an existing file
 
-=item B<nc>
-
-nc [-iN] [-wN] [-l] [-p PORT] [-f FILE|IPADDR PORT] [-e PROG]
-
-Open a pipe to IP:PORT or FILE
-
-	-l	Listen mode, for inbound connects
-		(use -ll with -e for persistent server)
-	-p PORT	Local port
-	-w SEC	Connect timeout
-	-i SEC	Delay interval for lines sent
-	-f FILE	Use file (ala /dev/ttyS0) instead of network
-	-e PROG	Run PROG after connect
-
 =item B<netstat>
 
 netstat [-ral] [-tuwx] [-enWp]
@@ -1391,6 +1379,7 @@ ping [OPTIONS] HOST
 
 Send ICMP ECHO_REQUEST packets to network hosts
 
+	-4,-6		Force IP or IPv6 name resolution
 	-c CNT		Send only CNT pings
 	-s SIZE		Send SIZE data bytes in packets (default:56)
 	-t TTL		Set TTL
@@ -1399,6 +1388,18 @@ Send ICMP ECHO_REQUEST packets to network hosts
 			(after all -c CNT packets are sent)
 	-w SEC		Seconds until ping exits (default:infinite)
 			(can exit earlier with -c CNT)
+	-q		Quiet, only displays output at start
+			and when finished
+
+=item B<ping6>
+
+ping6 [OPTIONS] HOST
+
+Send ICMP ECHO_REQUEST packets to network hosts
+
+	-c CNT		Send only CNT pings
+	-s SIZE		Send SIZE data bytes in packets (default:56)
+	-I IFACE/IP	Use interface or IP address as source
 	-q		Quiet, only displays output at start
 			and when finished
 
@@ -1582,7 +1583,7 @@ Edit kernel routing tables
 
 	-n	Don't resolve names
 	-e	Display other/more information
-	-A inet	Select address family
+	-A inet{6}	Select address family
 
 =item B<run-parts>
 
@@ -1988,12 +1989,13 @@ Translate, squeeze, or delete characters from stdin, writing to stdout
 
 =item B<traceroute>
 
-traceroute [-FIldnrv] [-f 1ST_TTL] [-m MAXTTL] [-p PORT] [-q PROBES]
+traceroute [-46FIldnrv] [-f 1ST_TTL] [-m MAXTTL] [-p PORT] [-q PROBES]
 	[-s SRC_IP] [-t TOS] [-w WAIT_SEC] [-g GATEWAY] [-i IFACE]
 	[-z PAUSE_MSEC] HOST [BYTES]
 
 Trace the route to HOST
 
+	-4,-6	Force IP or IPv6 name resolution
 	-F	Set the don't fragment bit
 	-I	Use ICMP ECHO instead of UDP datagrams
 	-l	Display the TTL value of the returned packet
@@ -2009,6 +2011,26 @@ Trace the route to HOST
 	-t	Type-of-service in probe packets (default 0)
 	-w	Time in seconds to wait for a response (default 3)
 	-g	Loose source route gateway (8 max)
+
+=item B<traceroute6>
+
+traceroute6 [-dnrv] [-m MAXTTL] [-p PORT] [-q PROBES]
+	[-s SRC_IP] [-t TOS] [-w WAIT_SEC] [-i IFACE]
+	HOST [BYTES]
+
+Trace the route to HOST
+
+	-d	Set SO_DEBUG options to socket
+	-n	Print numeric addresses
+	-r	Bypass routing tables, send directly to HOST
+	-v	Verbose
+	-m	Max time-to-live (max number of hops)
+	-p	Base UDP port number used in probes
+		(default is 33434)
+	-q	Number of probes per TTL (default 3)
+	-s	IP address to use as the source address
+	-t	Type-of-service in probe packets (default 0)
+	-w	Time in seconds to wait for a response (default 3)
 
 =item B<true>
 
