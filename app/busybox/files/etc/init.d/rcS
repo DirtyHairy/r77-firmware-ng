@@ -5,11 +5,31 @@ mount -t tmpfs udev /dev
 mount -t tmpfs tmpfs /run
 mount -t tmpfs tmpfs /tmp
 
+mkdir /dev/pts
+mount devpts /dev/pts -t devpts
+
 echo /sbin/mdev > /proc/sys/kernel/hotplug
 /sbin/mdev -s
 
 mount -t vfat -o rw,sync,nodev,nosuid /dev/mmcblk0p1 /mnt
 
-ifup -a
+test -e /mnt/sys && test ! -d /mnt/sys && rm -f /mnt/sys
+test -d /mnt/sys || mkdir /mnt/sys
+
+if test -e /mnt/developer; then
+    sleep 3
+    /sbin/ifup -a
+
+    if test -e /mnt/sys/ssh_host_key; then
+        cp /mnt/sys/ssh_host_key /etc/dropbear/dropbear_rsa_host_key
+    else
+        /sbin/dropbearkey -t rsa -f /etc/dropbear/dropbear_rsa_host_key
+        cp /etc/dropbear/dropbear_rsa_host_key /mnt/sys/ssh_host_key
+    fi
+
+    chmod 600 /etc/dropbear/dropbear_rsa_host_key
+
+    dropbear
+fi
 
 /usr/bin/dumper&
