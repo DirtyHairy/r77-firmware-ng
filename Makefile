@@ -9,6 +9,7 @@ include ./app/stella/Makefile
 include ./kernel/armbian-linux/Makefile
 include ./app/dumper/Makefile
 include ./app/dropbear/Makefile
+include ./app/sftpserver/Makefile
 
 all:
 	@echo "TOP Makefile"
@@ -19,6 +20,7 @@ all:
 	make lib/zlib/compile
 	make lib/png/compile
 	make app/dropbear/compile
+	make app/sftpserver/compile
 	make app/stella/compile
 	make app/dumper/compile
 	make cpio
@@ -33,6 +35,7 @@ clean:
 	make lib/zlib/clean
 	make lib/png/clean
 	make app/dropbear/clean
+	make app/sftpserver/distclean
 	make app/stella/clean
 	make app/dumper/clean
 	make kernel/armbian-linux/clean
@@ -48,6 +51,7 @@ distclean:
 	make app/stella/distclean
 	make app/dumper/distclean
 	make app/dropbear/distclean
+	make app/sftpserver/distclean
 	make kernel/armbian-linux/distclean
 	rm -rf out
 
@@ -58,6 +62,7 @@ install:
 	make lib/png/install
 	make lib/zlib/install
 	make app/dropbear/install
+	make app/sftpserver/install
 	make app/stella/install
 	make app/dumper/install
 	make kernel/armbian-linux/install
