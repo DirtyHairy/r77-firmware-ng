@@ -47,7 +47,7 @@ app/busybox/install:
 	    lib="$${lib##*/}"; \
 	    cp -L $(BUILDDIR)/lib/$$lib $(ROOTFSDIR)/lib; \
 	    $(STRIP) $(ROOTFSDIR)/lib/$$lib; \
-	    for link in `echo $(BUILDDIR)/lib/$${libname}*.so`; do \
+	    for link in `echo $(BUILDDIR)/lib/$${libname}-*.so`; do \
 	        ln -fs $$lib "$(ROOTFSDIR)/lib/$${link##*/}"; \
 	    done; \
         done	    

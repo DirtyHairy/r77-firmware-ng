@@ -4,3 +4,6 @@
 [submodule "app/dropbear"]
 	path = app/dropbear/dropbear
 	url = https://github.com/mkj/dropbear.git
+[submodule "app/sftpserver/sftpserver"]
+	path = app/sftpserver/sftpserver
+	url = https://github.com/ewxrjk/sftpserver.git
