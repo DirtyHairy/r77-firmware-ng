@@ -51,6 +51,7 @@ setup:
 ifeq (,$(wildcard $(TOPDIR)/out))
 	@echo "making out folder"
 	@mkdir -p ${OUTDIR}
+	@mkdir -o $(OUTDIR)/test
 endif
 ifeq (,$(wildcard $(BUILDDIR)))
 	@echo "making out/build_root/ folder"
