@@ -7,3 +7,6 @@
 [submodule "app/sftpserver/sftpserver"]
 	path = app/sftpserver/sftpserver
 	url = https://github.com/ewxrjk/sftpserver.git
+[submodule "lib/libump/libump"]
+	path = lib/libump/libump
+	url = https://github.com/linux-sunxi/libump.git
