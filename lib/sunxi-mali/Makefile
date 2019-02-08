@@ -9,8 +9,8 @@ lib/sunxi-mali/install:
 
 lib/sunxi-mali/test: $(OUTDIR)/test/sunxi-mali-test
 
-$(OUTDIR)/test/sunxi-mali-test: $(SUNXI_MALI_DIR)/test/test.c
-	$(CC) $(CFLAGS) -L$(BUILDDIR)/lib -I$(BUILDDIR)/include -Wl,-rpath-link,$(BUILDDIR)/lib -lEGL -lGLESv2 -o $@ $<
+$(OUTDIR)/test/sunxi-mali-test: $(SUNXI_MALI_DIR)/../test/test.c
+	$(CC) $(CFLAGS) -L$(BUILDDIR)/lib -I$(BUILDDIR)/include -Wl,-rpath-link,$(BUILDDIR)/lib -lEGL -lGLESv2 -lm -o $@ $<
 
 lib/sunxi-mali/clean:
 
