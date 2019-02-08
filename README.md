@@ -47,7 +47,7 @@ This repository references several git repositories as submodules. To fetch
 those after checkout, run
 
 ```
-    git submodule update --init
+    git submodule update --init --recursive
 ```
 
 ## Toolchain

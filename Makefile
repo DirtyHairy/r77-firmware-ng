@@ -11,6 +11,7 @@ include ./app/dumper/Makefile
 include ./app/dropbear/Makefile
 include ./app/sftpserver/Makefile
 include ./lib/libump/Makefile
+include ./lib/sunxi-mali/Makefile
 
 all:
 	@echo "TOP Makefile"
@@ -21,6 +22,7 @@ all:
 	make lib/zlib/compile
 	make lib/png/compile
 	make lib/libump/compile
+	make lib/sunxi-mali/compile
 	make app/dropbear/compile
 	make app/sftpserver/compile
 	make app/stella/compile
@@ -37,6 +39,7 @@ clean:
 	make lib/zlib/clean
 	make lib/png/clean
 	make lib/libump/clean
+	make lib/sunxi-mali/clean
 	make app/dropbear/clean
 	make app/sftpserver/distclean
 	make app/stella/clean
@@ -52,6 +55,7 @@ distclean:
 	make lib/zlib/distclean
 	make lib/png/distclean
 	make lib/libump/distclean
+	make lib/sunxi-mali/distclean
 	make app/stella/distclean
 	make app/dumper/distclean
 	make app/dropbear/distclean
@@ -66,6 +70,7 @@ install:
 	make lib/png/install
 	make lib/zlib/install
 	make lib/libump/install
+	make lib/sunxi-mali/install
 	make app/dropbear/install
 	make app/sftpserver/install
 	make app/stella/install

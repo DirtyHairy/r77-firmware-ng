@@ -10,3 +10,6 @@
 [submodule "lib/libump/libump"]
 	path = lib/libump/libump
 	url = https://github.com/linux-sunxi/libump.git
+[submodule "lib/sunxi-mali/sunxi-mali"]
+	path = lib/sunxi-mali/sunxi-mali
+	url = https://github.com/linux-sunxi/sunxi-mali.git
