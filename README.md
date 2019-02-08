@@ -26,6 +26,11 @@ changes made by Remowilliams that constitute the community firmware image on
   **IMPORTANT:** If there is a file called `sys` on your SD card, the firmware
   will delete it and create the directory in its place.
 
+# Branches and versions
+
+The `master` branch is where development for Stella 6 happens. If you want to
+build stable firmware for Stella 3.x, use the `stella-3.x` branch.
+
 # Setup
 
 ## Docker build environment
