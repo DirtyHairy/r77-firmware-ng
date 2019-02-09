@@ -39,8 +39,8 @@ endif
 app/busybox/install:
 	make -j4 -C$(BUSYBOX_WORKDIR) CROSS_COMPILE=$(CROSS_COMPILE) install
 	cp -raf $(BUSYBOX_WORKDIR)/_install/* $(ROOTFSDIR)
-	sudo tar -xjf ./app/busybox/files.tar.bz2 -C $(ROOTFSDIR)
-	sudo cp -raf ./app/busybox/files/* $(ROOTFSDIR)
+	tar -xjf ./app/busybox/files.tar.bz2 -C $(ROOTFSDIR)
+	cp -raf ./app/busybox/files/* $(ROOTFSDIR)
 
 	shopt -s nullglob; for libname in $(ROOTFS_LIBS); do \
 	    lib=`echo $(BUILDDIR)/lib/$${libname}.so.[0-9]` \
