@@ -16,7 +16,11 @@ mount -t vfat -o rw,sync,nodev,nosuid /dev/mmcblk0p1 /mnt
 test -e /mnt/sys && test ! -d /mnt/sys && rm -f /mnt/sys
 test -d /mnt/sys || mkdir /mnt/sys
 
+test -e /mnt/sys/settings && source /mnt/sys/settings
+
 if test -e /mnt/developer; then
+    test -n "$PASSWORD" && echo "root:$PASSWORD" | /usr/sbin/chpasswd
+
     sleep 3
     /sbin/ifup -a
 
