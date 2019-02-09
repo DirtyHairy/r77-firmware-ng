@@ -12,6 +12,7 @@ changes made by Remowilliams that constitute the community firmware image on
   the official OrangePi H3
   [kernel](https://github.com/orangepi-xunlong/OrangePiH3_kernel)
   (version r3p0 as there is a matching blob with an usable license).
+* User space has working EGL via the Mali blob
 * The build system and kernel have been patched to build with the current
   Linaro gcc 7.4 gnueabihf toolchain.
 * The build system has been cleaned up, the Hyperkin gui removed, and libpng
@@ -65,6 +66,14 @@ Presuming that all dependencies (including the toolchain) have been installed,
 the build is executed via `make`. You'll find the result of the build in the `out`
 directory (or in the directory pointed to by the `OUTDIR` environment variable).
 
+# Settings
+
+Behavior of the firmware can be customized via the optional `/sys/settings` file 
+on the SD card. The file is sourced during init and can affect the behavior of the
+firmware by settings shell variables. Supported variables:
+
+ * `PASSWORD`: Change root password for SSH login (see below)
+
 # Developer mode, ethernet and SSH access
 
 In order to enable ethernet and SSH support, place the firmware in development mode
@@ -96,8 +105,9 @@ other hardware to the kernel, please open a pull request.
 ## SSH
 
 In developer mode, the device is accessible via SSH. Both SCP and SFTP work, so the filesystem
-can be mounted remotely via sshfs. The `root` account is set up for SSH, the password
-is `whyNotFrye`.
+can be mounted remotely via sshfs. The `root` account is set up for SSH, and the default password
+is `whyNotFrye`. It can be changed by adding a `PASSWORD="..."` line to `/sys/settings` on the
+SD card (see above).
 
 The SSH host key is stored by the firmware in the `sys` directory on the SD card.
 If no key is found, a new key is generated on boot. This can take about half a minute,
