@@ -6,7 +6,7 @@ lib/sdl2/compile:
 	-mkdir -p $(SDL2_WORKDIR)
 ifeq (,$(wildcard $(SDL2_MAKEFILE)))
 	cd $(SDL2_WORKDIR) && $(SDL2_DIR)/configure \
-		CFLAGS="$(CFLAGS) -I$(BUILDDIR)/include" \
+		CFLAGS="$(CFLAGS) -I$(BUILDDIR)/include -I$(BUILDDIR)/usr/include" \
 		LDFLAGS="$(LDFLAGS) -L$(BUILDDIR)/lib" \
 		--host=arm-linux \
 		--prefix=$(BUILDDIR) \

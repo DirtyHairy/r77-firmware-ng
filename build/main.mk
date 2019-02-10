@@ -20,6 +20,8 @@ AR:=${CROSS_COMPILE}ar
 RANLIB:=${CROSS_COMPILE}ranlib
 STRIP:=${CROSS_COMPILE}strip
 CFLAGS:=-Os -Wall -march=armv7-a -mtune=cortex-a7 -mfpu=neon-vfpv4
+CFLAGS_HP:=-O3 -Wall -march=armv7-a -mtune=cortex-a7 -mfpu=neon-vfpv4 -funsafe-math-optimizations -flto
+
 #LDFLAGS:="-L$(BUILDDIR)/lib"
 LDFLAGS:=
 DFLAGS:=
