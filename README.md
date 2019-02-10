@@ -98,7 +98,7 @@ should are supported.
 
 If your device is not supported by the kernel, there is a chance that a driver from
 a more modern version of the kernel (or from the chipset vendor) can be added to the
-kernel. This is what worked for the RTL8152 driver that is unused by my own ethernet dongle.
+kernel. This is what worked for the RTL8152 driver that is used by my own ethernet dongle.
 However, how to do so exceeds the bounds of this documentation. If you add support for
 other hardware to the kernel, please open a pull request.
 
