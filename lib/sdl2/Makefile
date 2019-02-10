@@ -24,7 +24,7 @@ endif
 lib/sdl2/install:
 	make -C$(SDL2_WORKDIR) install
 	cp -raf $(BUILDDIR)/lib/libSDL2*so* $(ROOTFSDIR)/lib
-	$(STRIP) $(ROOTFSDIR)/lib/libSDL.so
+	$(STRIP) $(ROOTFSDIR)/lib/libSDL2.so
 
 lib/sdl2/clean:
 	make -C$(SDL2_WORKDIR) clean
