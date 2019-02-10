@@ -2,7 +2,6 @@ include build/main.mk
 include ./app/busybox/Makefile
 include ./app/uboot/Makefile
 include ./lib/alsa/Makefile
-include ./lib/sdl/Makefile
 include ./lib/libpng/Makefile
 include ./lib/zlib/Makefile
 include ./app/stella/Makefile
@@ -19,7 +18,6 @@ all:
 	make app/busybox/compile
 	make app/uboot/compile
 	make lib/alsa/compile
-	make lib/sdl/compile
 	make lib/zlib/compile
 	make lib/png/compile
 	make lib/libump/compile
@@ -37,7 +35,6 @@ clean:
 	make app/busybox/clean
 	make app/uboot/clean
 	make lib/alsa/clean
-	make lib/sdl/clean
 	make lib/zlib/clean
 	make lib/png/clean
 	make lib/libump/clean
@@ -54,7 +51,6 @@ distclean:
 	make app/busybox/distclean
 	make app/uboot/distclean
 	make lib/alsa/distclean
-	make lib/sdl/distclean
 	make lib/zlib/distclean
 	make lib/png/distclean
 	make lib/libump/distclean
@@ -70,7 +66,6 @@ distclean:
 install:
 	make app/busybox/install
 	make lib/alsa/install
-	make lib/sdl/install
 	make lib/png/install
 	make lib/zlib/install
 	make lib/libump/install
