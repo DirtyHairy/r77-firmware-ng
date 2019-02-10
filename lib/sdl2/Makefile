@@ -11,8 +11,12 @@ ifeq (,$(wildcard $(SDL2_MAKEFILE)))
 		--host=arm-linux \
 		--prefix=$(BUILDDIR) \
 		--enable-video-mali \
+		--disable-video-opengles1 \
 		--disable-video-vulkan \
-		--disable-video-opengles1
+		--disable-video-wayland \
+		--disable-arts \
+		--disable-nas \
+		--disable-pulseaudio
 endif
 	make -j$(CORES) -C$(SDL2_WORKDIR) V=$(VERBOSE)
 	make lib/sdl2/install
