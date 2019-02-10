@@ -13,3 +13,6 @@
 [submodule "lib/sunxi-mali/sunxi-mali"]
 	path = lib/sunxi-mali/sunxi-mali
 	url = https://github.com/linux-sunxi/sunxi-mali.git
+[submodule "lib/sdl2/sdl2"]
+	path = lib/sdl2/sdl2
+	url = https://github.com/DirtyHairy/SDL.git
