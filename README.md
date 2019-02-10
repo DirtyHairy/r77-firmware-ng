@@ -1,6 +1,6 @@
 # What is this?
 
-This a an attempt to update and rework the Retron 77 firmware sufficiently to
+This is an attempt to update and rework the Retron 77 firmware sufficiently to
 get SDL2 and Stella 6 running. It is built from the official Hyperkin
 [source drop](https://www.hyperkin.com/r77) (v0.6.2) and includes the
 changes made by Remowilliams that constitute the community firmware image on
@@ -19,11 +19,11 @@ changes made by Remowilliams that constitute the community firmware image on
   and libz are now integrated into the main build.
 * Most dependencies now build out-of-tree to avoid cluttering the source tree
   (U-Boot and ALSA still clutter).
-* Smaller firmware image due to various optimizations 
+* Smaller firmware image due to various optimizations
 * SSH access via USB ethernet dongles in developer mode (see below)
 * The firmware creates and uses a directory called `sys` in the root of the
   SD card.
-  
+
   **IMPORTANT:** If there is a file called `sys` on your SD card, the firmware
   will delete it and create the directory in its place.
 
@@ -53,7 +53,7 @@ those after checkout, run
 
 ## Toolchain
 
-You'll ned the
+You'll need the
 [gcc 7.4 gnueabihf toolchain](http://releases.linaro.org/components/toolchain/binaries/7.4-2019.02/arm-linux-gnueabihf/)
 from Linaro in order to build the firmware. The build
 system expects the toolchain at `toolchain/toolchain` and the sysroot at
@@ -68,7 +68,7 @@ directory (or in the directory pointed to by the `OUTDIR` environment variable).
 
 # Settings
 
-Behavior of the firmware can be customized via the optional `/sys/settings` file 
+Behavior of the firmware can be customized via the optional `/sys/settings` file
 on the SD card. The file is sourced during init and can affect the behavior of the
 firmware by settings shell variables. Supported variables:
 
@@ -98,7 +98,7 @@ should are supported.
 
 If your device is not supported by the kernel, there is a chance that a driver from
 a more modern version of the kernel (or from the chipset vendor) can be added to the
-kernel. This is what worked for the RTL8152 driver that is unsed by my own ethernet dongle.
+kernel. This is what worked for the RTL8152 driver that is unused by my own ethernet dongle.
 However, how to do so exceeds the bounds of this documentation. If you add support for
 other hardware to the kernel, please open a pull request.
 
