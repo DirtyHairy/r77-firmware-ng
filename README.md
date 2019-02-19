@@ -6,6 +6,12 @@ get SDL2 and Stella 6 running. It is built from the official Hyperkin
 changes made by Remowilliams that constitute the community firmware image on
 [AtariAge](http://atariage.com/forums/topic/281462-retron-77-community-build-image/).
 
+# State
+
+The firmware includes hardware 3D acceleration and runs current mainline Stella. However,
+several minor issues still exist, and the R77-specific changes to Stella 3.x must
+be reintegrated into the mainline, so the console is not playable yet.
+
 # Changes
 
 * The kernel has been patched to include the kernel side Mali drivers, taken from
@@ -15,6 +21,9 @@ changes made by Remowilliams that constitute the community firmware image on
 * User space has working EGL via the Mali blob
 * The build system and kernel have been patched to build with the current
   Linaro gcc 7.4 gnueabihf toolchain.
+* SDL1 has been replaced with a version of SDL2 that has been patched to support
+  hardware acceleration on Mali / framebuffer
+* Stella 3.x has been replaced with the current Stella 6.x mainline
 * The build system has been cleaned up, the Hyperkin gui removed, and libpng
   and libz are now integrated into the main build.
 * Most dependencies now build out-of-tree to avoid cluttering the source tree
