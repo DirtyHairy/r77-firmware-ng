@@ -9,7 +9,7 @@ changes made by Remowilliams that constitute the community firmware image on
 # State
 
 The firmware includes hardware 3D acceleration and runs current mainline Stella. However,
-several minor issues still exist, and the R77-specific changes to Stella 3.x must
+the R77-specific changes to Stella 3.x must
 be reintegrated into the mainline, so the console is not playable yet.
 
 # Changes
