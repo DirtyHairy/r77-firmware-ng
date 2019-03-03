@@ -16,6 +16,7 @@ ZIP := zip -q
 CP := cp
 WINDOWSPATH=
 STRIP := arm-linux-gnueabihfstrip
+BINARY_LOADER := qemu-arm -cpu cortex-a7 -L $(ROOTFSDIR)
 
 MODULES +=  src/unix
 MODULE_DIRS += 
@@ -28,7 +29,6 @@ DATADIR := /usr/local/share
 PROFILE := 
 
 HAVE_GCC = 1
-HAVE_GCC3 = 1
 
 INCLUDES += -I$(BUILDDIR)/include -I/$(BUILDDIR)/include/SDL2 -Isrc/emucore -Isrc/common -Isrc/common/tv_filters -Isrc/gui -Isrc/emucore/tia -Isrc/emucore/tia/frame-manager -I/usr/local/include/SDL2 -D_THREAD_SAFE -Isrc/unix -Isrc/debugger -Isrc/debugger/gui -Isrc/yacc -Isrc/cheat
 OBJS += 

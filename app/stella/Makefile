@@ -1,6 +1,5 @@
 STELLA_CONFIG:=app/stella/stella/config.mak
 
-
 stella:
 	@echo "stella config"
 
@@ -22,13 +21,13 @@ ifeq (,$(wildcard $(STELLA_CONFIG)))
 	--force-builtin-zlib
 endif
 	@echo "stella all CROSS_COMPILE="$(CROSS_COMPILE)
-	make -j$(CORES) -C ./app/stella/stella/ V=$(VERBOSE)
+	make -j$(CORES) -C ./app/stella/stella/ $(STELLA_BINARY)
 	make app/stella/install
 
 app/stella/install:
 	@echo "stella install"
-	@cp app/stella/stella/stella $(BUILDDIR)/usr/bin
-	@cp app/stella/stella/stella $(ROOTFSDIR)/usr/bin
+	@cp app/stella/stella/$(STELLA_BINARY) $(BUILDDIR)/usr/bin/stella
+	@cp app/stella/stella/$(STELLA_BINARY) $(ROOTFSDIR)/usr/bin/stella
 	@$(STRIP) $(ROOTFSDIR)/usr/bin/stella
 
 app/stella/menuconfig:
