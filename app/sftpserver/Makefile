@@ -22,4 +22,4 @@ app/sftpserver/distclean:
 ifneq (,$(wildcard $(SFTPSERVER_MAKEFILE)))
 	make -C$(SFTPSERVER_WORKDIR) distclean
 endif
-	rm -fr $(SFTPSERVER_WORKDIR)
+	-rm -fr $(SFTPSERVER_WORKDIR)

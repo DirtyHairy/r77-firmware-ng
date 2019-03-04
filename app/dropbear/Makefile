@@ -27,4 +27,4 @@ app/dropbear/distclean:
 ifneq (,$(wildcard $(DROPBEAR_MAKEFILE)))
 	make -C$(DROPBEAR_WORKDIR) distclean
 endif
-	rm -fr $(DROPBEAR_WORKDIR)
+	-rm -fr $(DROPBEAR_WORKDIR)

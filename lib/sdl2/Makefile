@@ -33,4 +33,4 @@ lib/sdl2/distclean:
 ifneq (,$(wildcard $(SDL2_MAKEFILE)))
 	make -C$(SDL2_WORKDIR) distclean
 endif
-	rm -fr $(SDL2_WORKDIR)
+	-rm -fr $(SDL2_WORKDIR)

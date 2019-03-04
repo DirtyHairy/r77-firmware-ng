@@ -23,4 +23,4 @@ lib/libump/distclean:
 ifneq (,$(wildcard $(LIBUMP_MAKEFILE)))
 	make -C$(LIBUMP_WORKDIR) distclean
 endif
-	rm -fr $(LIBUMP_WORKDIR)
+	-rm -fr $(LIBUMP_WORKDIR)

@@ -61,7 +61,7 @@ distclean:
 	make app/dropbear/distclean
 	make app/sftpserver/distclean
 	make kernel/armbian-linux/distclean
-	rm -rf out
+	-rm -rf $(OUTDIR)
 
 install:
 	make app/busybox/install

@@ -20,4 +20,4 @@ app/dumper/clean:
 
 app/dumper/distclean:
 	@echo "dumper distclean"
-	@rm -rf app/dumper/*.o app/dumper/dumper
+	-rm -rf app/dumper/*.o app/dumper/dumper
