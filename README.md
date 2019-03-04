@@ -49,7 +49,7 @@ You can use this
 [Dockerfile](https://github.com/DirtyHairy/r77-firmware-ng-build/tree/master)
 to set up a preconfigured build environment.
 This environment is based upon Debian stretch and contains all dependencies
-required for building the firmware (including the toolchain).
+required for building the firmware (including the toolchain and qemu-user).
 
 ## Git submodules
 
@@ -72,8 +72,16 @@ environment variable to point to the directory containing toolchain and sysroot.
 # Build
 
 Presuming that all dependencies (including the toolchain) have been installed,
-the build is executed via `make`. You'll find the result of the build in the `out`
+the build is executed via `make RELEASE=1` (for a release build) or `make`
+(for a development build). You'll find the result of the build in the `out`
 directory (or in the directory pointed to by the `OUTDIR` environment variable).
+
+## Release vs. development build
+
+In order to do a release build, invoke `make RELEASE=1`. In contrast to an
+"ordinary" development build, a release build will perform additional profiling
+and optimization on Stella. For this, `qemu-arm` has to be installed on the
+system.
 
 # Settings
 
