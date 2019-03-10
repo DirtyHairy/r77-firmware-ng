@@ -18,7 +18,7 @@ WINDOWSPATH=
 STRIP := arm-linux-gnueabihfstrip
 BINARY_LOADER := qemu-arm -cpu cortex-a7 -L $(ROOTFSDIR)
 
-MODULES +=  src/unix
+MODULES +=  src/unix src/unix/r77
 MODULE_DIRS += 
 EXEEXT := 
 
@@ -30,7 +30,7 @@ PROFILE :=
 
 HAVE_GCC = 1
 
-INCLUDES += -I$(BUILDDIR)/include -I/$(BUILDDIR)/include/SDL2 -Isrc/emucore -Isrc/common -Isrc/common/tv_filters -Isrc/gui -Isrc/emucore/tia -Isrc/emucore/tia/frame-manager -I/usr/local/include/SDL2 -D_THREAD_SAFE -Isrc/unix -Isrc/debugger -Isrc/debugger/gui -Isrc/yacc -Isrc/cheat
+INCLUDES += -I$(BUILDDIR)/include -I/$(BUILDDIR)/include/SDL2 -Isrc/emucore -Isrc/common -Isrc/common/tv_filters -Isrc/gui -Isrc/emucore/tia -Isrc/emucore/tia/frame-manager -I/usr/local/include/SDL2 -D_THREAD_SAFE -Isrc/unix -Isrc/unix/r77 -Isrc/debugger -Isrc/debugger/gui -Isrc/yacc -Isrc/cheat
 OBJS += 
 DEFINES +=  -DUNIX -DBSPF_UNIX -DMACOS_KEYS -DRETRON77 -DSOUND_SUPPORT -DJOYSTICK_SUPPORT
 LDFLAGS += 

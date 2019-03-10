@@ -6,6 +6,7 @@ app/stella/compile:
 ifeq (,$(wildcard $(STELLA_CONFIG)))
 	cp app/stella/config/config.mak $(STELLA_CONFIG)
 endif
+	touch $(STELLA_CONFIG)
 	make -j$(CORES) -C ./app/stella/stella/ $(STELLA_BINARY)
 	make app/stella/install
 
@@ -17,10 +18,15 @@ app/stella/install:
 app/stella/menuconfig:
 
 app/stella/clean:
+ifeq (,$(wildcard $(STELLA_CONFIG)))
+	cp app/stella/config/config.mak $(STELLA_CONFIG)
+endif
+	touch $(STELLA_CONFIG)
 	make -C ./app/stella/stella/ clean
 
 app/stella/distclean:
 ifeq (,$(wildcard $(STELLA_CONFIG)))
 	cp app/stella/config/config.mak $(STELLA_CONFIG)
 endif
+	touch $(STELLA_CONFIG)
 	make -C ./app/stella/stella/ distclean
