@@ -25,8 +25,14 @@ test -e /mnt/sys/settings && source /mnt/sys/settings
 if test -e /mnt/developer; then
     test -n "$PASSWORD" && echo "root:$PASSWORD" | /usr/sbin/chpasswd
 
-    sleep 3
+    sleep 5
     /sbin/ifup -a
+
+    dmesg > /mnt/sys/diagnostics.log
+    echo >> /mnt/sys/diagnostics.log
+    ifconfig -a >> /mnt/sys/diagnostics.log
+    echo >> /mnt/sys/diagnostics.log
+    lsusb >> /mnt/sys/diagnostics.log
 
     if test -e /mnt/sys/ssh_host_key; then
         cp /mnt/sys/ssh_host_key /etc/dropbear/dropbear_rsa_host_key
