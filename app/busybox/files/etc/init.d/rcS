@@ -21,14 +21,34 @@ test -e /mnt/sys && test ! -d /mnt/sys && rm -f /mnt/sys
 test -d /mnt/sys || mkdir /mnt/sys
 
 IFUP_DELAY=5
+LOGFILE="/mnt/sys/diagnostics.log"
 
 test -e /mnt/sys/settings && source /mnt/sys/settings
 
 if test -e /mnt/developer; then
+    echo > "$LOGFILE"
+
     test -n "$PASSWORD" && echo "root:$PASSWORD" | /usr/sbin/chpasswd
 
-    sleep "$IFUP_DELAY"
-    /sbin/ifup -a
+    if test -n "$WAIT_FOR_ETH0"; then
+	echo "waiting for eth0 to appear..." >> "$LOGFILE"
+        while ! ifconfig -a | grep -q eth0; do
+	    sleep 0.5
+	done
+    else
+	echo "sleeping for $IFUP_DELAY seconds..." >> "$LOGFILE"
+        sleep "$IFUP_DELAY"
+    fi
+
+    echo >> "$LOGFILE"
+    ifconfig -a >> "$LOGFILE"
+
+    echo >> "$LOGFILE"
+    echo "bringing up interfaces..." >> "$LOGFILE"
+    /sbin/ifup -a >> "$LOGFILE"
+
+    echo >> "$LOGFILE"
+    ifconfig -a >> "$LOGFILE"
 
     if test -e /mnt/sys/ssh_host_key; then
         cp /mnt/sys/ssh_host_key /etc/dropbear/dropbear_rsa_host_key
@@ -41,14 +61,14 @@ if test -e /mnt/developer; then
 
     dropbear
 
+    echo >> "$LOGFILE"
+    dmesg >> "$LOGFILE"
 
-    dmesg > /mnt/sys/diagnostics.log
-    echo >> /mnt/sys/diagnostics.log
-    ifconfig -a >> /mnt/sys/diagnostics.log
-    echo >> /mnt/sys/diagnostics.log
-    lsusb >> /mnt/sys/diagnostics.log
-    echo >> /mnt/sys/diagnostics.log
-    ps aux >> /mnt/sys/diagnostics.log
+    echo >> "$LOGFILE"
+    lsusb >> "$LOGFILE"
+
+    echo >> "$LOGFILE"
+    ps aux >> "$LOGFILE"
  
 fi
 
