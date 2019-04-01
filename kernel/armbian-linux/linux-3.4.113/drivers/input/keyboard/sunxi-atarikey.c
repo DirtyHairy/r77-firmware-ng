@@ -27,7 +27,7 @@ static struct gpio_config pd06_p1_diff_key_io;  //PD06
 static struct gpio_config pd07_NCONN_key_io;    //PD07
 static struct gpio_config pd08_fry_key_io;      //PD08
 static struct gpio_config pd09_reset_key_io;    //PD09
-static struct gpio_config pd10_NCONN_key_io;    //PD10
+static struct gpio_config pd10_aspect_key_io;   //PD10
 static struct gpio_config pd11_save_key_io;     //PD11
 static struct gpio_config pd12_color_key_io;    //PD12
 static struct gpio_config pd13_load_key_io;     //PD13
@@ -38,16 +38,20 @@ static int pd06_p1_diff_key_status = 1;
 static int pd07_NCONN_key_status = 1;
 static int pd08_fry_key_status = 1;
 static int pd09_reset_key_status = 1;
-static int pd10_NCONN_key_status = 1;
+static int pd10_aspect_key_status = 1;
 static int pd11_save_key_status = 1;
 static int pd12_color_key_status = 1;
 static int pd13_load_key_status = 1;
 static int pd14_select_key_status = 1;
 static int pd15_p2_diff_key_status = 1;
 
+static int AXIS_MAX = 32767, AXIS_MIN = -32768, AXIS_OFF = 0;
+
 static void atari_gpio_key_timer(unsigned long _data){
   schedule_work(&atari_gpio_work);
 }
+
+//#define DEBUG_KEYS
 
 static void atari_gpio_keys_report_event(struct work_struct *work){
   int val = 0;
@@ -57,66 +61,88 @@ static void atari_gpio_keys_report_event(struct work_struct *work){
     pd06_p1_diff_key_status = val;
     input_report_key(atari_dev, KEY_F6, (val == 0) ? 1 : 0);
     input_sync(atari_dev);
-    //printk("stanley PD06[p1 diff] key[%d] = %d\n", pd06_p1_diff_key_io.gpio, val);
+  #if defined(DEBUG_KEYS)
+    printk("stanley PD06[p1 diff] key[%d] = %d\n", pd06_p1_diff_key_io.gpio, val);
+  #endif
   }
   val = __gpio_get_value(pd07_NCONN_key_io.gpio);
   if(val != pd07_NCONN_key_status){
     pd07_NCONN_key_status = val;
-    //printk("stanley PD07[??] key[%d] = %d\n", pd07_NCONN_key_io.gpio, val);
+  #if defined(DEBUG_KEYS)
+    printk("stanley PD07[??] key[%d] = %d\n", pd07_NCONN_key_io.gpio, val);
+  #endif
   }
   val = __gpio_get_value(pd08_fry_key_io.gpio);
   if(val != pd08_fry_key_status){
     pd08_fry_key_status = val;
     input_report_key(atari_dev, KEY_BACKSPACE, (val == 0) ? 1 : 0);
     input_sync(atari_dev);
-    //printk("stanley PD08[fry] key[%d] = %d\n", pd08_fry_key_io.gpio, val);
+  #if defined(DEBUG_KEYS)
+    printk("stanley PD08[fry] key[%d] = %d\n", pd08_fry_key_io.gpio, val);
+  #endif
   }
   val = __gpio_get_value(pd09_reset_key_io.gpio);
   if(val != pd09_reset_key_status){
     pd09_reset_key_status = val;
     input_report_key(atari_dev, KEY_F2, (val == 0) ? 1 : 0);
     input_sync(atari_dev);
-    //printk("stanley PD09[reset] key[%d] = %d\n", pd09_reset_key_io.gpio, val);
+  #if defined(DEBUG_KEYS)
+    printk("stanley PD09[reset] key[%d] = %d\n", pd09_reset_key_io.gpio, val);
+  #endif
   }
-  val = __gpio_get_value(pd10_NCONN_key_io.gpio);
-  if(val != pd10_NCONN_key_status){
-    pd10_NCONN_key_status = val;
-    //printk("stanley PD10[??] key[%d] = %d\n", pd10_NCONN_key_io.gpio, val);
+  val = __gpio_get_value(pd10_aspect_key_io.gpio);
+  if(val != pd10_aspect_key_status){
+    pd10_aspect_key_status = val;
+    input_report_key(atari_dev, KEY_F13, (val == 0) ? 1 : 0);
+    input_sync(atari_dev);
+  #if defined(DEBUG_KEYS)
+    printk("stanley PD10[aspect] key[%d] = %d\n", pd10_aspect_key_io.gpio, val);
+  #endif
   }
-  val = __gpio_get_value(pd11_save_key_io.gpio);
+  val = __gpio_get_value(pd11_save_key_io.gpio) == 0 ? 1 : 0; // Seems to be wired backwards!
   if(val != pd11_save_key_status){
     pd11_save_key_status = val;
     input_report_key(atari_dev, KEY_F9, (val == 0) ? 1 : 0);
     input_sync(atari_dev);
-    //printk("stanley PD11[save] key[%d] = %d\n", pd11_save_key_io.gpio, val);
+  #if defined(DEBUG_KEYS)
+    printk("stanley PD11[save] key[%d] = %d\n", pd11_save_key_io.gpio, val);
+  #endif
   }
   val = __gpio_get_value(pd12_color_key_io.gpio);
   if(val != pd12_color_key_status){
     pd12_color_key_status = val;
     input_report_key(atari_dev, KEY_F4, (val == 0) ? 1 : 0);
     input_sync(atari_dev);
-    //printk("stanley PD12[color] key[%d] = %d\n", pd12_color_key_io.gpio, val);
+  #if defined(DEBUG_KEYS)
+    printk("stanley PD12[color] key[%d] = %d\n", pd12_color_key_io.gpio, val);
+  #endif
   }
   val = __gpio_get_value(pd13_load_key_io.gpio);
   if(val != pd13_load_key_status){
     pd13_load_key_status = val;
     input_report_key(atari_dev, KEY_F11, (val == 0) ? 1 : 0);
     input_sync(atari_dev);
-    //printk("stanley PD13[load] key[%d] = %d\n", pd13_load_key_io.gpio, val);
+  #if defined(DEBUG_KEYS)
+    printk("stanley PD13[load] key[%d] = %d\n", pd13_load_key_io.gpio, val);
+  #endif
   }
   val = __gpio_get_value(pd14_select_key_io.gpio);
   if(val != pd14_select_key_status){
     input_report_key(atari_dev, KEY_F1, (val == 0) ? 1 : 0);
     input_sync(atari_dev);
     pd14_select_key_status = val;
-    //printk("stanley PD14[select] key[%d] = %d\n", pd14_select_key_io.gpio, val);
+  #if defined(DEBUG_KEYS)
+    printk("stanley PD14[select] key[%d] = %d\n", pd14_select_key_io.gpio, val);
+  #endif
   }
   val = __gpio_get_value(pd15_p2_diff_key_io.gpio);
   if(val != pd15_p2_diff_key_status){
     pd15_p2_diff_key_status = val;
     input_report_key(atari_dev, KEY_F8, (val == 0) ? 1 : 0);
     input_sync(atari_dev);
-    //printk("stanley PD15[p2 diff] key[%d] = %d\n", pd15_p2_diff_key_io.gpio, val);
+  #if defined(DEBUG_KEYS)
+    printk("stanley PD15[p2 diff] key[%d] = %d\n", pd15_p2_diff_key_io.gpio, val);
+  #endif
   }
 
   mod_timer( &atari_gpio_timer, (jiffies) + 1);
@@ -139,7 +165,7 @@ static int atari_gpio_script_init(void){
   type = script_get_item("gpio_para", "gpio_pin_6", &val);
   pd11_save_key_io = val.gpio;
   type = script_get_item("gpio_para", "gpio_pin_7", &val);
-  pd10_NCONN_key_io = val.gpio;
+  pd10_aspect_key_io = val.gpio;
   type = script_get_item("gpio_para", "gpio_pin_8", &val);
   pd13_load_key_io = val.gpio;
   type = script_get_item("gpio_para", "gpio_pin_9", &val);
@@ -263,45 +289,45 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
         if( g_i2c_key.left.key != old_key.left.key ){
           if(g_i2c_key.left.u.k0 != old_key.left.u.k0){ //Up
             if(g_i2c_key.left.u.k0 == 1){
-              input_event(input_left, EV_KEY, KEY_UP, 0);
+              input_event(input_left, EV_ABS, ABS_Y, AXIS_OFF);
             }else{
-              input_event(input_left, EV_KEY, KEY_UP, 1);
+              input_event(input_left, EV_ABS, ABS_Y, AXIS_MIN);
             }
             input_sync(input_left);
             //printk("Left KEY_UP\n");
           }
           if(g_i2c_key.left.u.k1 != old_key.left.u.k1){ //Left
             if(g_i2c_key.left.u.k1 == 1){
-              input_event(input_left, EV_KEY, KEY_LEFT, 0);
+              input_event(input_left, EV_ABS, ABS_X, AXIS_OFF);
             }else{
-              input_event(input_left, EV_KEY, KEY_LEFT, 1);
+              input_event(input_left, EV_ABS, ABS_X, AXIS_MIN);
             }
             input_sync(input_left);
             //printk("Left KEY_LEFT\n");
           }
           if(g_i2c_key.left.u.k2 != old_key.left.u.k2){ //Down
             if(g_i2c_key.left.u.k2 == 1){
-              input_event(input_left, EV_KEY, KEY_DOWN, 0);
+              input_event(input_left, EV_ABS, ABS_Y, AXIS_OFF);
             }else{
-              input_event(input_left, EV_KEY, KEY_DOWN, 1);
+              input_event(input_left, EV_ABS, ABS_Y, AXIS_MAX);
             }
             input_sync(input_left);
             //printk("Left KEY_DOWN\n");
           }
           if(g_i2c_key.left.u.k3 != old_key.left.u.k3){ //Right
             if(g_i2c_key.left.u.k3 == 1){
-              input_event(input_left, EV_KEY, KEY_RIGHT, 0);
+              input_event(input_left, EV_ABS, ABS_X, AXIS_OFF);
             }else{
-              input_event(input_left, EV_KEY, KEY_RIGHT, 1);
+              input_event(input_left, EV_ABS, ABS_X, AXIS_MAX);
             }
             input_sync(input_left);
             //printk("Left KEY_RIGHT\n");
           }
           if(g_i2c_key.left.u.k5 != old_key.left.u.k5){ //Fire
             if(g_i2c_key.left.u.k5 == 1){
-              input_event(input_left, EV_KEY, KEY_SPACE, 0);
+              input_event(input_left, EV_KEY, BTN_0, 0);
             }else{
-              input_event(input_left, EV_KEY, KEY_SPACE, 1);
+              input_event(input_left, EV_KEY, BTN_0, 1);
             }
             input_sync(input_left);
             //printk("Left KEY_SPACE\n");
@@ -360,45 +386,45 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
         if( g_i2c_key.right.key != old_key.right.key ){
           if(g_i2c_key.right.u.k0 != old_key.right.u.k0){ //Up
             if(g_i2c_key.right.u.k0 == 1){
-              input_event(input_right, EV_KEY, KEY_Y, 0);
+              input_event(input_right, EV_ABS, ABS_Y, AXIS_OFF);
             }else{
-              input_event(input_right, EV_KEY, KEY_Y, 1);
+              input_event(input_right, EV_ABS, ABS_Y, AXIS_MIN);
             }
             input_sync(input_right);
             //printk("Right UP\n");
           }
           if(g_i2c_key.right.u.k1 != old_key.right.u.k1){ //Left
             if(g_i2c_key.right.u.k1 == 1){
-              input_event(input_right, EV_KEY, KEY_G, 0);
+              input_event(input_right, EV_ABS, ABS_X, AXIS_OFF);
             }else{
-              input_event(input_right, EV_KEY, KEY_G, 1);
+              input_event(input_right, EV_ABS, ABS_X, AXIS_MIN);
             }
             input_sync(input_right);
             //printk("Right LEFT\n");
           }
           if(g_i2c_key.right.u.k2 != old_key.right.u.k2){ //Down
             if(g_i2c_key.right.u.k2 == 1){
-              input_event(input_right, EV_KEY, KEY_H, 0);
+              input_event(input_right, EV_ABS, ABS_Y, AXIS_OFF);
             }else{
-              input_event(input_right, EV_KEY, KEY_H, 1);
+              input_event(input_right, EV_ABS, ABS_Y, AXIS_MAX);
             }
             input_sync(input_right);
             //printk("Right DOWN\n");
           }
           if(g_i2c_key.right.u.k3 != old_key.right.u.k3){ //Right
             if(g_i2c_key.right.u.k3 == 1){
-              input_event(input_right, EV_KEY, KEY_J, 0);
+              input_event(input_right, EV_ABS, ABS_X, AXIS_OFF);
             }else{
-              input_event(input_right, EV_KEY, KEY_J, 1);
+              input_event(input_right, EV_ABS, ABS_X, AXIS_MAX);
             }
             input_sync(input_right);
             //printk("Right Right\n");
           }
           if(g_i2c_key.right.u.k5 != old_key.right.u.k5){ //Fire
             if(g_i2c_key.right.u.k5 == 1){
-              input_event(input_right, EV_KEY, KEY_F, 0);
+              input_event(input_right, EV_KEY, BTN_0, 0);
             }else{
-              input_event(input_right, EV_KEY, KEY_F, 1);
+              input_event(input_right, EV_KEY, BTN_0, 1);
             }
             input_sync(input_right);
             //printk("Right Fire\n");
@@ -426,24 +452,19 @@ static int bte_i2c_probe(struct i2c_client *client, const struct i2c_device_id *
   input_left->id.product = 0x0001;
   input_left->id.version = 0x0100;
 
-  input_set_capability(input_left, EV_KEY, BTN_0);    //PaddleA Fire Button
-  input_set_capability(input_left, EV_KEY, BTN_1);    //PaddleB Fire Button
+  input_set_capability(input_left, EV_KEY, BTN_0); //PaddleA Fire Button, Joy0 Fire0
+  input_set_capability(input_left, EV_KEY, BTN_1); //PaddleB Fire Button, Joy0 Fire1
   input_set_capability(input_left, EV_KEY, BTN_2);
   input_set_capability(input_left, EV_KEY, BTN_3);
   input_set_capability(input_left, EV_KEY, BTN_4);
   input_set_capability(input_left, EV_KEY, BTN_5);
   input_set_capability(input_left, EV_KEY, BTN_6);
   input_set_capability(input_left, EV_KEY, BTN_7);
-  input_set_capability(input_left, EV_KEY, KEY_UP);   //Joystick0 HAT UP
-  input_set_capability(input_left, EV_KEY, KEY_DOWN); //Joystick0 HAT DOWN
-  input_set_capability(input_left, EV_KEY, KEY_LEFT); //Joystick0 HAT LEFT
-  input_set_capability(input_left, EV_KEY, KEY_RIGHT);//Joystick0 HAT RIGHT
-  input_set_capability(input_left, EV_KEY, KEY_SPACE);//Joystick0 HAT FIRE
 
   input_set_capability(input_left, EV_ABS, ABS_X);
-  input_set_abs_params(input_left, ABS_X, -32768, 32767, 0, 0);
+  input_set_abs_params(input_left, ABS_X, AXIS_MIN, AXIS_MAX, 0, 0);
   input_set_capability(input_left, EV_ABS, ABS_Y);
-  input_set_abs_params(input_left, ABS_Y, -32768, 32767, 0, 0);
+  input_set_abs_params(input_left, ABS_Y, AXIS_MIN, AXIS_MAX, 0, 0);
   input_register_device(input_left);
 
   input_right->name = "i2c_controller";
@@ -453,24 +474,19 @@ static int bte_i2c_probe(struct i2c_client *client, const struct i2c_device_id *
   input_right->id.product = 0x0001;
   input_right->id.version = 0x0100;
 
-  input_set_capability(input_right, EV_KEY, BTN_0); //PaddleA Fire Button
-  input_set_capability(input_right, EV_KEY, BTN_1); //PaddleB Fire Button
+  input_set_capability(input_right, EV_KEY, BTN_0); //PaddleA Fire Button, Joy1 Fire0
+  input_set_capability(input_right, EV_KEY, BTN_1); //PaddleB Fire Button, Joy1 Fire1
   input_set_capability(input_right, EV_KEY, BTN_2);
   input_set_capability(input_right, EV_KEY, BTN_3);
   input_set_capability(input_right, EV_KEY, BTN_4);
   input_set_capability(input_right, EV_KEY, BTN_5);
   input_set_capability(input_right, EV_KEY, BTN_6);
   input_set_capability(input_right, EV_KEY, BTN_7);
-  input_set_capability(input_right, EV_KEY, KEY_Y); //Joystick1 HAT UP
-  input_set_capability(input_right, EV_KEY, KEY_H); //Joystick1 HAT DOWN
-  input_set_capability(input_right, EV_KEY, KEY_G); //Joystick1 HAT LEFT
-  input_set_capability(input_right, EV_KEY, KEY_J); //Joystick1 HAT RIGHT
-  input_set_capability(input_right, EV_KEY, KEY_F); //Joystick1 HAT FIRE
 
   input_set_capability(input_right, EV_ABS, ABS_X);
-  input_set_abs_params(input_right, ABS_X, -32768, 32767, 0, 0);
+  input_set_abs_params(input_right, ABS_X, AXIS_MIN, AXIS_MAX, 0, 0);
   input_set_capability(input_right, EV_ABS, ABS_Y);
-  input_set_abs_params(input_right, ABS_Y, -32768, 32767, 0, 0);
+  input_set_abs_params(input_right, ABS_Y, AXIS_MIN, AXIS_MAX, 0, 0);
   input_register_device(input_right);
 
 
@@ -521,18 +537,15 @@ static int __init atari_key_init(void){
   atari_dev->id.version = 0x0100;
 
   atari_dev->evbit[0] = BIT_MASK(EV_KEY);
-  input_set_capability(atari_dev, EV_KEY, KEY_SPACE);
-  input_set_capability(atari_dev, EV_KEY, KEY_F1);
-  input_set_capability(atari_dev, EV_KEY, KEY_F2);
-  input_set_capability(atari_dev, EV_KEY, KEY_F3);
-  input_set_capability(atari_dev, EV_KEY, KEY_F4);
-  input_set_capability(atari_dev, EV_KEY, KEY_F5);
-  input_set_capability(atari_dev, EV_KEY, KEY_F6);
-  input_set_capability(atari_dev, EV_KEY, KEY_F7);
-  input_set_capability(atari_dev, EV_KEY, KEY_F8);
-  input_set_capability(atari_dev, EV_KEY, KEY_F9);
-  input_set_capability(atari_dev, EV_KEY, KEY_F11);
-  input_set_capability(atari_dev, EV_KEY, KEY_BACKSPACE);
+  input_set_capability(atari_dev, EV_KEY, KEY_F1);  // Select
+  input_set_capability(atari_dev, EV_KEY, KEY_F2);  // Reset
+  input_set_capability(atari_dev, EV_KEY, KEY_F4);  // Color/BW
+  input_set_capability(atari_dev, EV_KEY, KEY_F6);  // P1 difficulty
+  input_set_capability(atari_dev, EV_KEY, KEY_F8);  // P2 difficulty
+  input_set_capability(atari_dev, EV_KEY, KEY_F9);  // Save state
+  input_set_capability(atari_dev, EV_KEY, KEY_F11); // Load state
+  input_set_capability(atari_dev, EV_KEY, KEY_F13); // Aspect (4:3/16:9)
+  input_set_capability(atari_dev, EV_KEY, KEY_BACKSPACE); // Fry
 
   err = input_register_device(atari_dev);
   if (err){
