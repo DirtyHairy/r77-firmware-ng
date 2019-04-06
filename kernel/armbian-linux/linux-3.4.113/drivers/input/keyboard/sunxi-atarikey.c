@@ -23,160 +23,87 @@ static struct i2c_client *g_client = NULL;
 static struct work_struct atari_i2c_work;
 static struct timer_list atari_i2c_timer;
 
-static struct gpio_config pd06_p1_diff_key_io;  //PD06
-static struct gpio_config pd07_NCONN_key_io;    //PD07
-static struct gpio_config pd08_fry_key_io;      //PD08
-static struct gpio_config pd09_reset_key_io;    //PD09
-static struct gpio_config pd10_aspect_key_io;   //PD10
-static struct gpio_config pd11_save_key_io;     //PD11
-static struct gpio_config pd12_color_key_io;    //PD12
-static struct gpio_config pd13_load_key_io;     //PD13
-static struct gpio_config pd14_select_key_io;   //PD14
-static struct gpio_config pd15_p2_diff_key_io;  //PD15
+/**
+ * This structure contains all information required for reading from GPIO
+ * pins and sending applicable events.
+ * These are used for console keys (select, reset, etc) only.
+ */
+struct gpio_key_t
+{
+  struct gpio_config cfg;  // gpio handler
+  unsigned int code;       // event to send when pin state changes
+  int pin_state;           // current state of the pin: 0 (pressed) or 1 (released)
+  int swap_signal;         // whether to swap the signal when sending the event
+  char desc[15];           // description used in debugging
+};
+static struct gpio_key_t gpio_key[10];  // there are 10 pins; only 9 are used
 
-static int pd06_p1_diff_key_status = 1;
-static int pd07_NCONN_key_status = 1;
-static int pd08_fry_key_status = 1;
-static int pd09_reset_key_status = 1;
-static int pd10_aspect_key_status = 1;
-static int pd11_save_key_status = 1;
-static int pd12_color_key_status = 1;
-static int pd13_load_key_status = 1;
-static int pd14_select_key_status = 1;
-static int pd15_p2_diff_key_status = 1;
 
-static int AXIS_MAX = 32767, AXIS_MIN = -32768, AXIS_OFF = 0;
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 static void atari_gpio_key_timer(unsigned long _data){
   schedule_work(&atari_gpio_work);
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+static void atari_gpio_assign_key(unsigned int i, char* pin_id,
+                                  unsigned int code, const char* desc)
+{
+  script_item_u val;
+  script_item_value_type_e type;
+
+  type = script_get_item("gpio_para", pin_id, &val);
+  gpio_key[i].cfg = val.gpio;
+  gpio_key[i].code = code;
+  gpio_key[i].pin_state = 1;
+  strncpy(gpio_key[i].desc, desc, 14);
+
+  /**
+   * Some keys seem to be wired backwards; we detect that here
+   * Signal should start in state 1 (released); if not, it needs to be swapped
+   * The function that actually reads the pins detects this and swaps it there
+   */
+  gpio_key[i].swap_signal = __gpio_get_value(gpio_key[i].cfg.gpio) == 1 ? 0 : 1;
+};
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+static void atari_gpio_script_init(void)
+{
+  atari_gpio_assign_key(0, "gpio_pin_1",  KEY_F6,        "PD06[p1 diff]");
+  atari_gpio_assign_key(1, "gpio_pin_2",  0,             "PD07[??]"     );
+  atari_gpio_assign_key(2, "gpio_pin_3",  KEY_BACKSPACE, "PD08[fry]"    );
+  atari_gpio_assign_key(3, "gpio_pin_4",  KEY_F2,        "PD09[reset]"  );
+  atari_gpio_assign_key(4, "gpio_pin_5",  KEY_F13,       "PD10[aspect]" );
+  atari_gpio_assign_key(5, "gpio_pin_6",  KEY_F9,        "PD11[save]"   );
+  atari_gpio_assign_key(6, "gpio_pin_7",  KEY_F4,        "PD12[color]"  );
+  atari_gpio_assign_key(7, "gpio_pin_8",  KEY_F11,       "PD13[load]"   );
+  atari_gpio_assign_key(8, "gpio_pin_9",  KEY_F1,        "PD14[select]" );
+  atari_gpio_assign_key(9, "gpio_pin_10", KEY_F8,        "PD15[p2 diff]");
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //#define DEBUG_KEYS
+static void atari_gpio_keys_report_event(struct work_struct* work)
+{
+  for(unsigned int i = 0; i < 10; ++i)
+  {
+    int state = __gpio_get_value(gpio_key[i].cfg.gpio);
+    if(gpio_key[i].swap_signal)
+      state ^= 1;
 
-static void atari_gpio_keys_report_event(struct work_struct *work){
-  int val = 0;
-
-  val = __gpio_get_value(pd06_p1_diff_key_io.gpio);
-  if(val != pd06_p1_diff_key_status){
-    pd06_p1_diff_key_status = val;
-    input_report_key(atari_dev, KEY_F6, (val == 0) ? 1 : 0);
-    input_sync(atari_dev);
-  #if defined(DEBUG_KEYS)
-    printk("stanley PD06[p1 diff] key[%d] = %d\n", pd06_p1_diff_key_io.gpio, val);
-  #endif
+    if(state != gpio_key[i].pin_state)
+    {
+      gpio_key[i].pin_state = state;
+      input_report_key(atari_dev, gpio_key[i].code, state ^ 1);
+      input_sync(atari_dev);
+    #if defined(DEBUG_KEYS)
+      printk("GPIO key: %-14s key[%d] = %d\n", gpio_key[i].desc, gpio_key[i].cfg.gpio, state);
+    #endif
+    }
   }
-  val = __gpio_get_value(pd07_NCONN_key_io.gpio);
-  if(val != pd07_NCONN_key_status){
-    pd07_NCONN_key_status = val;
-  #if defined(DEBUG_KEYS)
-    printk("stanley PD07[??] key[%d] = %d\n", pd07_NCONN_key_io.gpio, val);
-  #endif
-  }
-  val = __gpio_get_value(pd08_fry_key_io.gpio);
-  if(val != pd08_fry_key_status){
-    pd08_fry_key_status = val;
-    input_report_key(atari_dev, KEY_BACKSPACE, (val == 0) ? 1 : 0);
-    input_sync(atari_dev);
-  #if defined(DEBUG_KEYS)
-    printk("stanley PD08[fry] key[%d] = %d\n", pd08_fry_key_io.gpio, val);
-  #endif
-  }
-  val = __gpio_get_value(pd09_reset_key_io.gpio);
-  if(val != pd09_reset_key_status){
-    pd09_reset_key_status = val;
-    input_report_key(atari_dev, KEY_F2, (val == 0) ? 1 : 0);
-    input_sync(atari_dev);
-  #if defined(DEBUG_KEYS)
-    printk("stanley PD09[reset] key[%d] = %d\n", pd09_reset_key_io.gpio, val);
-  #endif
-  }
-  val = __gpio_get_value(pd10_aspect_key_io.gpio);
-  if(val != pd10_aspect_key_status){
-    pd10_aspect_key_status = val;
-    input_report_key(atari_dev, KEY_F13, (val == 0) ? 1 : 0);
-    input_sync(atari_dev);
-  #if defined(DEBUG_KEYS)
-    printk("stanley PD10[aspect] key[%d] = %d\n", pd10_aspect_key_io.gpio, val);
-  #endif
-  }
-  val = __gpio_get_value(pd11_save_key_io.gpio) == 0 ? 1 : 0; // Seems to be wired backwards!
-  if(val != pd11_save_key_status){
-    pd11_save_key_status = val;
-    input_report_key(atari_dev, KEY_F9, (val == 0) ? 1 : 0);
-    input_sync(atari_dev);
-  #if defined(DEBUG_KEYS)
-    printk("stanley PD11[save] key[%d] = %d\n", pd11_save_key_io.gpio, val);
-  #endif
-  }
-  val = __gpio_get_value(pd12_color_key_io.gpio);
-  if(val != pd12_color_key_status){
-    pd12_color_key_status = val;
-    input_report_key(atari_dev, KEY_F4, (val == 0) ? 1 : 0);
-    input_sync(atari_dev);
-  #if defined(DEBUG_KEYS)
-    printk("stanley PD12[color] key[%d] = %d\n", pd12_color_key_io.gpio, val);
-  #endif
-  }
-  val = __gpio_get_value(pd13_load_key_io.gpio);
-  if(val != pd13_load_key_status){
-    pd13_load_key_status = val;
-    input_report_key(atari_dev, KEY_F11, (val == 0) ? 1 : 0);
-    input_sync(atari_dev);
-  #if defined(DEBUG_KEYS)
-    printk("stanley PD13[load] key[%d] = %d\n", pd13_load_key_io.gpio, val);
-  #endif
-  }
-  val = __gpio_get_value(pd14_select_key_io.gpio);
-  if(val != pd14_select_key_status){
-    input_report_key(atari_dev, KEY_F1, (val == 0) ? 1 : 0);
-    input_sync(atari_dev);
-    pd14_select_key_status = val;
-  #if defined(DEBUG_KEYS)
-    printk("stanley PD14[select] key[%d] = %d\n", pd14_select_key_io.gpio, val);
-  #endif
-  }
-  val = __gpio_get_value(pd15_p2_diff_key_io.gpio);
-  if(val != pd15_p2_diff_key_status){
-    pd15_p2_diff_key_status = val;
-    input_report_key(atari_dev, KEY_F8, (val == 0) ? 1 : 0);
-    input_sync(atari_dev);
-  #if defined(DEBUG_KEYS)
-    printk("stanley PD15[p2 diff] key[%d] = %d\n", pd15_p2_diff_key_io.gpio, val);
-  #endif
-  }
-
   mod_timer( &atari_gpio_timer, (jiffies) + 1);
 }
 
-static int atari_gpio_script_init(void){
-  script_item_u val;
-  script_item_value_type_e  type;
-
-  type = script_get_item("gpio_para", "gpio_pin_1", &val);
-  pd06_p1_diff_key_io = val.gpio;
-  type = script_get_item("gpio_para", "gpio_pin_2", &val);
-  pd07_NCONN_key_io = val.gpio;
-  type = script_get_item("gpio_para", "gpio_pin_3", &val);
-  pd08_fry_key_io = val.gpio;
-  type = script_get_item("gpio_para", "gpio_pin_4", &val);
-  pd09_reset_key_io = val.gpio;
-  type = script_get_item("gpio_para", "gpio_pin_5", &val);
-  pd12_color_key_io = val.gpio;
-  type = script_get_item("gpio_para", "gpio_pin_6", &val);
-  pd11_save_key_io = val.gpio;
-  type = script_get_item("gpio_para", "gpio_pin_7", &val);
-  pd10_aspect_key_io = val.gpio;
-  type = script_get_item("gpio_para", "gpio_pin_8", &val);
-  pd13_load_key_io = val.gpio;
-  type = script_get_item("gpio_para", "gpio_pin_9", &val);
-  pd14_select_key_io = val.gpio;
-  type = script_get_item("gpio_para", "gpio_pin_10", &val);
-  pd15_p2_diff_key_io = val.gpio;
-
-  return 0;
-}
-
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #define ATARI_CONTROLLER (0x52 << 1) //i2c slave address
 static const struct i2c_device_id bte_i2c_ids[] = {
   { "bte_i2c", 0 },
@@ -216,6 +143,11 @@ static int old_i2c_key_paddle1 = 0;//Right PaddleB
 static int old_i2c_key_paddle2 = 0;//Left  PaddleA
 static int old_i2c_key_paddle3 = 0;//Left  PaddleB
 
+#define AXIS_MAX  32767
+#define AXIS_MIN -32768
+#define AXIS_CENTER 0
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 static void atari_i2c_keys_report_event(struct work_struct *work){
   static struct i2c_key old_key = { 0, .left.key = 0x2f, .right.key = 0x2f};
   int scale_value = 190;
@@ -289,7 +221,7 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
         if( g_i2c_key.left.key != old_key.left.key ){
           if(g_i2c_key.left.u.k0 != old_key.left.u.k0){ //Up
             if(g_i2c_key.left.u.k0 == 1){
-              input_event(input_left, EV_ABS, ABS_Y, AXIS_OFF);
+              input_event(input_left, EV_ABS, ABS_Y, AXIS_CENTER);
             }else{
               input_event(input_left, EV_ABS, ABS_Y, AXIS_MIN);
             }
@@ -298,7 +230,7 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
           }
           if(g_i2c_key.left.u.k1 != old_key.left.u.k1){ //Left
             if(g_i2c_key.left.u.k1 == 1){
-              input_event(input_left, EV_ABS, ABS_X, AXIS_OFF);
+              input_event(input_left, EV_ABS, ABS_X, AXIS_CENTER);
             }else{
               input_event(input_left, EV_ABS, ABS_X, AXIS_MIN);
             }
@@ -307,7 +239,7 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
           }
           if(g_i2c_key.left.u.k2 != old_key.left.u.k2){ //Down
             if(g_i2c_key.left.u.k2 == 1){
-              input_event(input_left, EV_ABS, ABS_Y, AXIS_OFF);
+              input_event(input_left, EV_ABS, ABS_Y, AXIS_CENTER);
             }else{
               input_event(input_left, EV_ABS, ABS_Y, AXIS_MAX);
             }
@@ -316,7 +248,7 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
           }
           if(g_i2c_key.left.u.k3 != old_key.left.u.k3){ //Right
             if(g_i2c_key.left.u.k3 == 1){
-              input_event(input_left, EV_ABS, ABS_X, AXIS_OFF);
+              input_event(input_left, EV_ABS, ABS_X, AXIS_CENTER);
             }else{
               input_event(input_left, EV_ABS, ABS_X, AXIS_MAX);
             }
@@ -386,7 +318,7 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
         if( g_i2c_key.right.key != old_key.right.key ){
           if(g_i2c_key.right.u.k0 != old_key.right.u.k0){ //Up
             if(g_i2c_key.right.u.k0 == 1){
-              input_event(input_right, EV_ABS, ABS_Y, AXIS_OFF);
+              input_event(input_right, EV_ABS, ABS_Y, AXIS_CENTER);
             }else{
               input_event(input_right, EV_ABS, ABS_Y, AXIS_MIN);
             }
@@ -395,7 +327,7 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
           }
           if(g_i2c_key.right.u.k1 != old_key.right.u.k1){ //Left
             if(g_i2c_key.right.u.k1 == 1){
-              input_event(input_right, EV_ABS, ABS_X, AXIS_OFF);
+              input_event(input_right, EV_ABS, ABS_X, AXIS_CENTER);
             }else{
               input_event(input_right, EV_ABS, ABS_X, AXIS_MIN);
             }
@@ -404,7 +336,7 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
           }
           if(g_i2c_key.right.u.k2 != old_key.right.u.k2){ //Down
             if(g_i2c_key.right.u.k2 == 1){
-              input_event(input_right, EV_ABS, ABS_Y, AXIS_OFF);
+              input_event(input_right, EV_ABS, ABS_Y, AXIS_CENTER);
             }else{
               input_event(input_right, EV_ABS, ABS_Y, AXIS_MAX);
             }
@@ -413,7 +345,7 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
           }
           if(g_i2c_key.right.u.k3 != old_key.right.u.k3){ //Right
             if(g_i2c_key.right.u.k3 == 1){
-              input_event(input_right, EV_ABS, ABS_X, AXIS_OFF);
+              input_event(input_right, EV_ABS, ABS_X, AXIS_CENTER);
             }else{
               input_event(input_right, EV_ABS, ABS_X, AXIS_MAX);
             }
@@ -438,6 +370,7 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
   mod_timer( &atari_i2c_timer, (jiffies) + 1);
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 static int bte_i2c_probe(struct i2c_client *client, const struct i2c_device_id *id){
   //printk("stanley bte_i2c_probe\n");
   g_client = client;
@@ -496,15 +429,18 @@ static int bte_i2c_probe(struct i2c_client *client, const struct i2c_device_id *
   return 0;
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 static int bte_i2c_remove(struct i2c_client *client){
   return 0;
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 static int bte_i2c_detect(struct i2c_client *client, struct i2c_board_info* info){
   //printk("stanley bte_i2c_detect\n");
   return 0;
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 static struct i2c_driver bte_i2c_driver = {
   .driver = {
     .name = "bte_i2c",
@@ -516,6 +452,7 @@ static struct i2c_driver bte_i2c_driver = {
   .id_table = bte_i2c_ids,
 };
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 static int __init atari_key_init(void){
   int err =0;
 
@@ -572,6 +509,7 @@ fail_memory:
   return err;
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 static void __exit atari_key_exit(void){
   i2c_del_driver(&bte_i2c_driver);
   input_unregister_device(atari_dev);
@@ -580,6 +518,6 @@ static void __exit atari_key_exit(void){
 module_init(atari_key_init);
 module_exit(atari_key_exit);
 
-MODULE_AUTHOR("<stanley.ho@elansat.com>");
+MODULE_AUTHOR("Stella Team");
 MODULE_DESCRIPTION("atari gpio key and joystick driver");
 MODULE_LICENSE("GPL");
