@@ -72,9 +72,9 @@ static void atari_gpio_script_init(void)
   atari_gpio_assign_key(1, "gpio_pin_2",  0,             "PD07[??]"     );
   atari_gpio_assign_key(2, "gpio_pin_3",  KEY_BACKSPACE, "PD08[fry]"    );
   atari_gpio_assign_key(3, "gpio_pin_4",  KEY_F2,        "PD09[reset]"  );
-  atari_gpio_assign_key(4, "gpio_pin_5",  KEY_F13,       "PD10[aspect]" );
+  atari_gpio_assign_key(4, "gpio_pin_5",  KEY_F4,        "PD12[color]"  );
   atari_gpio_assign_key(5, "gpio_pin_6",  KEY_F9,        "PD11[save]"   );
-  atari_gpio_assign_key(6, "gpio_pin_7",  KEY_F4,        "PD12[color]"  );
+  atari_gpio_assign_key(6, "gpio_pin_7",  KEY_F13,       "PD10[aspect]" );
   atari_gpio_assign_key(7, "gpio_pin_8",  KEY_F11,       "PD13[load]"   );
   atari_gpio_assign_key(8, "gpio_pin_9",  KEY_F1,        "PD14[select]" );
   atari_gpio_assign_key(9, "gpio_pin_10", KEY_F8,        "PD15[p2 diff]");
