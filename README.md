@@ -58,6 +58,9 @@ just throttle the clock and get slower but, again, **you are using this at your 
 
 # Hacking the firmware
 
+What follows are technical details and instructions for hacking and developing the firmware.
+You do not have to read them if you just want to use the firmware for playing.
+
 ## Changes
 
 * The kernel has been patched to include the kernel side Mali drivers, taken from
