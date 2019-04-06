@@ -5,6 +5,11 @@ It is built from the official Hyperkin [source drop](https://www.hyperkin.com/r7
 and includes the changes made by Remowilliams that constitute the community firmware image on
 [AtariAge](http://atariage.com/forums/topic/281462-retron-77-community-build-image/).
 
+# Installation
+
+Grab a release from the [releases page](https://github.com/DirtyHairy/r77-firmware-ng/releases)
+and follow the [installation instructions](./INSTALL.md).
+
 # Features
 
 Stella 6 is a huge improvement over the original version of Stella 3 packaged with the
@@ -27,7 +32,7 @@ R77. Among many other things you will get:
    dongle and access a shell via SSH (see below).
     
 **IMPORTANT:** If there is a file called `sys` on your SD card, the firmware
-will delete it and create the directory in its place.
+will delete it and create a directory in its place.
   
 # Known issues
 
@@ -50,11 +55,6 @@ In particular, note that this firmware raises the CPU clock of the R77 from 1GHz
 within the specs). No excessive temperature has been observed during testing, but be sure to keep the R77
 in a well-ventillated area (not under a stack of books). If the temperature gets to hot, the device should
 just throttle the clock and get slower but, again, **you are using this at your own risk**.
-
-# Installation
-
-Grab a release from the [releases page](https://github.com/DirtyHairy/r77-firmware-ng/releases)
-and follow the [installation instructions](./INSTALL.md).
 
 # Hacking the firmware
 
