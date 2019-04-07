@@ -42,6 +42,9 @@ This firmware is currently in beta state. There are several known issues:
 * The Color/BW and 4:3/16:9 buttons are swapped
 * 16:9 mode is currently not available
 * There may be some issues with aspect ratio correction and PAL games
+* Enabling the time machine (using an attached keyboard) will exhaust the available RAM and crash Stella
+* Taking repeated PNG snapshots (using an attached keyboard) may exhaust the available RAM,
+  render Stella unstable and crash it
 
 There may be other bugs. Please be sure to report any issues not mentioned here on AtariAge and / or
 open an [issue](https://github.com/DirtyHairy/r77-firmware-ng/issues) on github.
