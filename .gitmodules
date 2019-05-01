@@ -16,3 +16,6 @@
 [submodule "lib/sdl2/sdl2"]
 	path = lib/sdl2/sdl2
 	url = https://github.com/DirtyHairy/SDL.git
+[submodule "lib/sqlite/sqlite"]
+	path = lib/sqlite/sqlite
+	url = https://github.com/sqlite/sqlite.git
