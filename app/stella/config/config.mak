@@ -32,7 +32,7 @@ HAVE_GCC = 1
 
 INCLUDES += -I$(BUILDDIR)/include -I/$(BUILDDIR)/include/SDL2 -Isrc/emucore -Isrc/common -Isrc/common/tv_filters -Isrc/gui -Isrc/emucore/tia -Isrc/emucore/tia/frame-manager -I/usr/local/include/SDL2 -D_THREAD_SAFE -Isrc/unix -Isrc/unix/r77 -Isrc/debugger -Isrc/debugger/gui -Isrc/yacc -Isrc/cheat
 OBJS +=
-DEFINES +=  -DUNIX -DBSPF_UNIX -DRETRON77 -DSOUND_SUPPORT -DJOYSTICK_SUPPORT -DSDL_SUPPORT -DPNG_SUPPORT -DZIP_SUPPORT
+DEFINES +=  -DUNIX -DBSPF_UNIX -DRETRON77 -DSOUND_SUPPORT -DJOYSTICK_SUPPORT -DSDL_SUPPORT -DGUI_SUPPORT -DPNG_SUPPORT -DZIP_SUPPORT
 LDFLAGS +=
 
 CXX_UPDATE_DEP_FLAG = -MMD -MF "$(*D)/$(DEPDIR)/$(*F).d" -MQ "$@" -MP
