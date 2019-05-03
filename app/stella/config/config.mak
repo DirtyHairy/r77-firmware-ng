@@ -18,7 +18,7 @@ WINDOWSPATH=
 STRIP := arm-linux-gnueabihfstrip
 BINARY_LOADER := qemu-arm -cpu cortex-a7 -L $(ROOTFSDIR)
 
-MODULES +=  src/unix src/unix/r77
+MODULES +=  src/unix src/unix/r77 src/gui
 MODULE_DIRS +=
 EXEEXT :=
 
