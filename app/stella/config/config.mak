@@ -30,7 +30,7 @@ PROFILE :=
 
 HAVE_GCC = 1
 
-INCLUDES += -I$(BUILDDIR)/include -I/$(BUILDDIR)/include/SDL2 -Isrc/emucore -Isrc/common -Isrc/common/tv_filters -Isrc/gui -Isrc/emucore/tia -Isrc/emucore/tia/frame-manager -I/usr/local/include/SDL2 -D_THREAD_SAFE -Isrc/unix -Isrc/unix/r77 -Isrc/debugger -Isrc/debugger/gui -Isrc/yacc -Isrc/cheat
+INCLUDES += -I$(BUILDDIR)/include -I/$(BUILDDIR)/include/SDL2 -Isrc/emucore -Isrc/common -Isrc/common/tv_filters -Isrc/gui -Isrc/emucore/tia -Isrc/emucore/tia/frame-manager -Isrc/unix -Isrc/unix/r77 -Isrc/common/repository/sqlite -I/usr/local/include/SDL2 -D_THREAD_SAFE
 OBJS +=
 DEFINES +=  -DUNIX -DBSPF_UNIX -DRETRON77 -DSOUND_SUPPORT -DJOYSTICK_SUPPORT -DSDL_SUPPORT -DGUI_SUPPORT -DPNG_SUPPORT -DZIP_SUPPORT -DSQLITE_SUPPORT
 LDFLAGS +=
