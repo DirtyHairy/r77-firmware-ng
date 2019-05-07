@@ -150,9 +150,9 @@ static int old_i2c_key_paddle3 = 0;//Left  PaddleB
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 static void atari_i2c_keys_report_event(struct work_struct *work){
   static struct i2c_key old_key = { 0, .left.key = 0x2f, .right.key = 0x2f};
-  int scale_value = 190;
-  int noise_value = 3;
-  int paddle_mid_value = 0x70;
+  int scale_value = 240; // was 190;
+  int noise_value = 0;// was 3;
+  int paddle_mid_value = 0x80;//was 0x70;
   int cur_paddle0 = 0;
   int cur_paddle1 = 0;
   int cur_paddle2 = 0;
@@ -174,8 +174,8 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
       if(g_i2c_key.paddle2 != 0 || g_i2c_key.paddle3 != 0){//Left PaddleA/PaddleB
         if((g_i2c_key.paddle2 != 0)){//Left PaddleA
           cur_paddle2 = g_i2c_key.paddle2 - paddle_mid_value;
-          if(abs(cur_paddle2 - old_i2c_key_paddle2) > noise_value){
-            input_event(input_left, EV_ABS, ABS_X, cur_paddle2 * scale_value);
+          if(abs(cur_paddle2 - old_i2c_key_paddle2) > noise_value){ // TODO: better anti-jitter code
+            input_event(input_left, EV_ABS, ABS_X, cur_paddle2 * scale_value); // TODO: limit maximum to 32767
             input_sync(input_left);
             old_i2c_key_paddle2 = cur_paddle2;
             //printk("Left PaddleA %d\n", cur_paddle2 * scale_value);
