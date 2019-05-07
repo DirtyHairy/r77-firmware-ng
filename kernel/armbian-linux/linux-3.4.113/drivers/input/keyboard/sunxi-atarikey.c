@@ -175,7 +175,7 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
         if((g_i2c_key.paddle2 != 0)){//Left PaddleA
           cur_paddle2 = g_i2c_key.paddle2 - paddle_mid_value;
           if(abs(cur_paddle2 - old_i2c_key_paddle2) > noise_value){ // TODO: better anti-jitter code
-            input_event(input_left, EV_ABS, ABS_X, cur_paddle2 * scale_value); // TODO: limit maximum to 32767
+            input_event(input_left, EV_ABS, ABS_RX, cur_paddle2 * scale_value); // TODO: limit maximum to 32767
             input_sync(input_left);
             old_i2c_key_paddle2 = cur_paddle2;
             //printk("Left PaddleA %d\n", cur_paddle2 * scale_value);
@@ -184,7 +184,7 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
         if((g_i2c_key.paddle3 != 0)){//Left PaddleB
           cur_paddle3 = g_i2c_key.paddle3 - paddle_mid_value;
           if(abs(cur_paddle3 - old_i2c_key_paddle3) > noise_value){
-            input_event(input_left, EV_ABS, ABS_Y, cur_paddle3 * scale_value);
+            input_event(input_left, EV_ABS, ABS_RY, cur_paddle3 * scale_value);
             input_sync(input_left);
             old_i2c_key_paddle3 = cur_paddle3;
             //printk("Left PaddleB %d\n", cur_paddle3 * scale_value);
@@ -272,7 +272,7 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
         if((g_i2c_key.paddle0 != 0)){//Right PaddleA
           cur_paddle0 = g_i2c_key.paddle0 - paddle_mid_value;
           if(abs(cur_paddle0 - old_i2c_key_paddle0) > noise_value){
-            input_event(input_right, EV_ABS, ABS_X, cur_paddle0 * scale_value);
+            input_event(input_right, EV_ABS, ABS_RX, cur_paddle0 * scale_value);
             input_sync(input_right);
             old_i2c_key_paddle0 = cur_paddle0;
             //printk("Right PaddleA %d\n", cur_paddle0 * scale_value);
@@ -281,7 +281,7 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
         if((g_i2c_key.paddle1 != 0)){//Right PaddleB
           cur_paddle1 = g_i2c_key.paddle1 - paddle_mid_value;
           if(abs(cur_paddle1 - old_i2c_key_paddle1) > noise_value){
-            input_event(input_right, EV_ABS, ABS_Y, cur_paddle1 * scale_value);
+            input_event(input_right, EV_ABS, ABS_RY, cur_paddle1 * scale_value);
             input_sync(input_right);
             old_i2c_key_paddle1 = cur_paddle1;
             //printk("Right PaddleB %d\n", cur_paddle1 * scale_value);
@@ -398,6 +398,11 @@ static int bte_i2c_probe(struct i2c_client *client, const struct i2c_device_id *
   input_set_abs_params(input_left, ABS_X, AXIS_MIN, AXIS_MAX, 0, 0);
   input_set_capability(input_left, EV_ABS, ABS_Y);
   input_set_abs_params(input_left, ABS_Y, AXIS_MIN, AXIS_MAX, 0, 0);
+  input_set_capability(input_left, EV_ABS, ABS_RX);
+  input_set_abs_params(input_left, ABS_RX, AXIS_MIN, AXIS_MAX, 0, 0);
+  input_set_capability(input_left, EV_ABS, ABS_RY);
+  input_set_abs_params(input_left, ABS_RY, AXIS_MIN, AXIS_MAX, 0, 0);
+
   input_register_device(input_left);
 
   input_right->name = "i2c_controller";
@@ -420,6 +425,10 @@ static int bte_i2c_probe(struct i2c_client *client, const struct i2c_device_id *
   input_set_abs_params(input_right, ABS_X, AXIS_MIN, AXIS_MAX, 0, 0);
   input_set_capability(input_right, EV_ABS, ABS_Y);
   input_set_abs_params(input_right, ABS_Y, AXIS_MIN, AXIS_MAX, 0, 0);
+  input_set_capability(input_right, EV_ABS, ABS_RX);
+  input_set_abs_params(input_right, ABS_RX, AXIS_MIN, AXIS_MAX, 0, 0);
+  input_set_capability(input_right, EV_ABS, ABS_RY);
+  input_set_abs_params(input_right, ABS_RY, AXIS_MIN, AXIS_MAX, 0, 0);
   input_register_device(input_right);
 
 
