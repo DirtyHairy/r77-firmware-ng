@@ -151,8 +151,8 @@ static int old_i2c_key_paddle3 = 0;//Left  PaddleB
 static void atari_i2c_keys_report_event(struct work_struct *work){
   static struct i2c_key old_key = { 0, .left.key = 0x2f, .right.key = 0x2f};
   int scale_value = 240; // was 190;
-  int noise_value = 0;// was 3;
-  int paddle_mid_value = 0x80;//was 0x70;
+  //int noise_value = 3;
+  int paddle_mid_value = 0x76;//was 0x70;
   int cur_paddle0 = 0;
   int cur_paddle1 = 0;
   int cur_paddle2 = 0;
@@ -174,21 +174,21 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
       if(g_i2c_key.paddle2 != 0 || g_i2c_key.paddle3 != 0){//Left PaddleA/PaddleB
         if((g_i2c_key.paddle2 != 0)){//Left PaddleA
           cur_paddle2 = g_i2c_key.paddle2 - paddle_mid_value;
-          if(abs(cur_paddle2 - old_i2c_key_paddle2) > noise_value){ // TODO: better anti-jitter code
+          //if(abs(cur_paddle2 - old_i2c_key_paddle2) > noise_value){ // TODO: better anti-jitter code
             input_event(input_left, EV_ABS, ABS_RX, cur_paddle2 * scale_value); // TODO: limit maximum to 32767
             input_sync(input_left);
             old_i2c_key_paddle2 = cur_paddle2;
             //printk("Left PaddleA %d\n", cur_paddle2 * scale_value);
-          }
+          //}
         }
         if((g_i2c_key.paddle3 != 0)){//Left PaddleB
           cur_paddle3 = g_i2c_key.paddle3 - paddle_mid_value;
-          if(abs(cur_paddle3 - old_i2c_key_paddle3) > noise_value){
+          //if(abs(cur_paddle3 - old_i2c_key_paddle3) > noise_value){
             input_event(input_left, EV_ABS, ABS_RY, cur_paddle3 * scale_value);
             input_sync(input_left);
             old_i2c_key_paddle3 = cur_paddle3;
             //printk("Left PaddleB %d\n", cur_paddle3 * scale_value);
-          }
+          //}
         }
         if(g_i2c_key.left.u.k5 != old_key.left.u.k5){ //Hyperkin Left Paddle FireA
           if(g_i2c_key.left.u.k5 == 1){
@@ -271,21 +271,21 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
       if(g_i2c_key.paddle0 != 0 || g_i2c_key.paddle1 != 0){//Right PaddleA/PaddleB
         if((g_i2c_key.paddle0 != 0)){//Right PaddleA
           cur_paddle0 = g_i2c_key.paddle0 - paddle_mid_value;
-          if(abs(cur_paddle0 - old_i2c_key_paddle0) > noise_value){
+          //if(abs(cur_paddle0 - old_i2c_key_paddle0) > noise_value){
             input_event(input_right, EV_ABS, ABS_RX, cur_paddle0 * scale_value);
             input_sync(input_right);
             old_i2c_key_paddle0 = cur_paddle0;
             //printk("Right PaddleA %d\n", cur_paddle0 * scale_value);
-          }
+          //}
         }
         if((g_i2c_key.paddle1 != 0)){//Right PaddleB
           cur_paddle1 = g_i2c_key.paddle1 - paddle_mid_value;
-          if(abs(cur_paddle1 - old_i2c_key_paddle1) > noise_value){
+          //if(abs(cur_paddle1 - old_i2c_key_paddle1) > noise_value){
             input_event(input_right, EV_ABS, ABS_RY, cur_paddle1 * scale_value);
             input_sync(input_right);
             old_i2c_key_paddle1 = cur_paddle1;
             //printk("Right PaddleB %d\n", cur_paddle1 * scale_value);
-          }
+          //}
         }
         if(g_i2c_key.right.u.k5 != old_key.right.u.k5){ //Hyperkin Right Paddle FireA
           if(g_i2c_key.right.u.k5 == 1){
