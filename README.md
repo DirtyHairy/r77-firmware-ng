@@ -26,13 +26,14 @@ R77. Among many other things you will get:
  
  * The Hyperkin GUI is replaced with Stella's own launcher
  * There is a dedicated "mini" settings UI for easy acces to the most important settings
- * A command palette that can be opened by pressing 4:3 / 16:9.
+ * A command palette that can be opened by pressing 4:3/16:9 (16:9 mode is availabe from
+   the command palette).
  * UI navigation with the buttons on the console (check out the
    [documentation](https://github.com/stella-emu/stella/blob/master/docs/R77_readme.txt)
    for details)
  * Paddle jitter is much better than with the original firmware
- * Press "Fry" to return to the launcher from a running game (Frying isn't available yet).
-   Frying is available frm the command palette
+ * Press "Fry" to return to the launcher from a running game.
+   Frying is available from the command palette
  * Support for USB controllers (gamepads, joysticks, keyboards). You'll need to use a USB Y
    cable to connect them while powering the device at the same time.
  * A "development mode" that allows you to connect to the device through a supported USB network 
