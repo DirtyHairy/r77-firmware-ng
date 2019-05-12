@@ -171,6 +171,8 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
 //    printk("stanley ret=%d len=%d, right=0x%x, R_PA=0x%x, R_PB=0x%x, left=0x%x, L_PA=0x%x, L_PB=0x%x\n",
 //      ret, g_i2c_key.len, g_i2c_key.right.key, g_i2c_key.paddle0, g_i2c_key.paddle1, g_i2c_key.left.key, g_i2c_key.paddle2, g_i2c_key.paddle3);
     if(ret == 7){
+      // - values: 255 (top) .. 0 (bottom)
+      // - bottom visible: ~110 (NTSC), ~80 (PAL)
       if(g_i2c_key.paddle2 != 0 || g_i2c_key.paddle3 != 0){//Left PaddleA/PaddleB
         if((g_i2c_key.paddle2 != 0)){//Left PaddleA
           cur_paddle2 = g_i2c_key.paddle2 - paddle_mid_value;
@@ -182,7 +184,8 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
           //}
         }
         if((g_i2c_key.paddle3 != 0)){//Left PaddleB
-          cur_paddle3 = g_i2c_key.paddle3 - paddle_mid_value;
+          cur_paddle3 = g_i2c_key.paddle3 - paddle_mid_value + 12
+              - max(80, g_i2c_key.paddle2) * 6 / max(10, g_i2c_key.paddle3 - 96);
           //if(abs(cur_paddle3 - old_i2c_key_paddle3) > noise_value){
             input_event(input_left, EV_ABS, ABS_RY, cur_paddle3 * scale_value);
             input_sync(input_left);
@@ -279,7 +282,8 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
           //}
         }
         if((g_i2c_key.paddle1 != 0)){//Right PaddleB
-          cur_paddle1 = g_i2c_key.paddle1 - paddle_mid_value;
+          cur_paddle1 = g_i2c_key.paddle1 - paddle_mid_value + 12
+              - max(80, g_i2c_key.paddle0) * 6 / max(10, g_i2c_key.paddle1 - 96);
           //if(abs(cur_paddle1 - old_i2c_key_paddle1) > noise_value){
             input_event(input_right, EV_ABS, ABS_RY, cur_paddle1 * scale_value);
             input_sync(input_right);
