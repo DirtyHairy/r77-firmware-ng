@@ -156,7 +156,8 @@ DHCP request, so you can use this to find the assigned IP address from your rout
 
 The kernel used by Hyperkin is very old (3.4 series from 2012), so not all USB ethernet adapters
 supported by modern Linux work. Among others, RTL8150 and RTL8152 based devices
-should are supported.
+should are supported. An AX88772 based device has been reported to work as well, which
+implies that other AX88xxx based devices should work as well.
 
 If your device is not supported by the kernel, there is a chance that a driver from
 a more modern version of the kernel (or from the chipset vendor) can be added to the
