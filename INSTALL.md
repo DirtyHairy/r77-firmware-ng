@@ -17,7 +17,7 @@ recommended method if you are coming from the original firmware or the original 
     you can write the image on a terminal with `dd` on those systems if you know what you are doing.
     
     **WARNING:** This step is dangerous. Selecting a wrong drive for writing the SD image will wipe the drive,
-    destroying all data on it and potentially rendering your computer unusable. Be cautious and male sure you know what
+    destroying all data on it and potentially rendering your computer unusable. Be cautious and make sure you know what
     you are doing. Ask someone for help if you aren't.
   5. Reinsert the SD card into the device and turn it back on. Say hello to Stella 6.
 
