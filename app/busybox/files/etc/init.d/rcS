@@ -17,8 +17,10 @@ for i in 0 1 2 3; do
     echo 1200000 > /sys/devices/system/cpu/cpu$i/cpufreq/scaling_setspeed
 done
 
-test -e /mnt/sys && test ! -d /mnt/sys && rm -f /mnt/sys
-test -d /mnt/sys || mkdir /mnt/sys
+for dir in sys games; do
+    test -e /mnt/$dir && test ! -d /mnt/$dir && rm -f /mnt/$dir
+    test -d /mnt/$dir || mkdir /mnt/$dir
+done
 
 IFUP_DELAY=5
 LOGFILE="/mnt/sys/diagnostics.log"
@@ -69,7 +71,7 @@ if test -e /mnt/developer; then
 
     echo >> "$LOGFILE"
     ps aux >> "$LOGFILE"
- 
+
 fi
 
 /usr/bin/dumper&
