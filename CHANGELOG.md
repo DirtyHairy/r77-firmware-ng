@@ -1,8 +1,17 @@
 # Changelog
 
-## 6.1-beta1
+## 6.1.2
 
-Initial release of Stella 6 on the R77
+ * Update Stella to 6.1.2
+ * Create directory "games" on the SD card if it is missing
+
+## 6.1.1
+
+ * Update Stella to 6.1.1
+
+## 6.1.0
+
+ * Update Stella to 6.1.0
 
 ## 6.1-beta2
 
@@ -17,3 +26,7 @@ Second beta release of Stella 6 on the R77. Major changes:
  * All changes to the settings are now saved immediatelly.
  * Paddles connected to the 9 pin port of the R77 now work without additional mappings
  * "Dejitter" filter for cleaning paddle input (enabled by default)
+
+## 6.1-beta1
+
+Initial release of Stella 6 on the R77
