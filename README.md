@@ -20,10 +20,10 @@ R77. Among many other things you will get:
  * TV emulation, including scanlines and phosphor effect
  * Smooth video without tearing
  * Support for all cartridges out there, including all ARM-based games
- 
+
  The firmware contains many other enhancements over the original, many of which are inherited
  from the original community image by Remowilliams (see above). Among other things:
- 
+
  * The Hyperkin GUI is replaced with Stella's own launcher
  * There is a dedicated "mini" settings UI for easy acces to the most important settings
  * A command palette that can be opened by pressing 4:3/16:9 (16:9 mode is availabe from
@@ -36,12 +36,12 @@ R77. Among many other things you will get:
    Frying is available from the command palette
  * Support for USB controllers (gamepads, joysticks, keyboards). You'll need to use a USB Y
    cable to connect them while powering the device at the same time.
- * A "development mode" that allows you to connect to the device through a supported USB network 
+ * A "development mode" that allows you to connect to the device through a supported USB network
    dongle and access a shell via SSH (see below).
-    
-**IMPORTANT:** If there is a file called `sys` on your SD card, the firmware
+
+**IMPORTANT:** If there is a file called `sys` or `games` on your SD card, the firmware
 will delete it and create a directory in its place.
-  
+
 # Known issues
 
 This firmware is currently in beta state. There are several known issues:
@@ -189,7 +189,7 @@ on the SD card. The file is sourced during init and can affect the behavior of t
 firmware by settings shell variables. Supported variables:
 
  * `PASSWORD`: Change root password for SSH login (see below)
- * `LOGFILE`: During boot, the firmware will write diagnostics data to a file on the SD. 
+ * `LOGFILE`: During boot, the firmware will write diagnostics data to a file on the SD.
    The default is `/sys/diagnostics.log`.
  * `IFUP_DELAY`: Delay before attempting to bring up `eth0`. The default
    is 5 seconds.
