@@ -72,6 +72,8 @@ if test -e /mnt/developer; then
     echo >> "$LOGFILE"
     ps aux >> "$LOGFILE"
 
+    echo >> "$LOGFILE"
+    ls -la /dev/tty* >> "$LOGFILE"
 fi
 
 /usr/bin/dumper&
