@@ -36,7 +36,11 @@ R77. Among many other things you will get:
  * Press "Fry" to return to the launcher from a running game.
    Frying is available from the command palette
  * Support for USB controllers (gamepads, joysticks, keyboards). You'll need to use a USB Y
-   cable to connect them while powering the device at the same time.
+   cable to connect them while powering the device at the same time. Refer to the Stella manual
+   for more instructions.
+ * Support for the Atarivox connected to a USB-to-serial dongle. Most dongles out there should
+   be supported. You need USB Y cable to connect the dongle, and the dongle needs to be present
+   when the console is powered on. Refer to the Stella manual for more instruction.
  * A "development mode" that allows you to connect to the device through a supported USB network
    dongle and access a shell via SSH (see below).
 
