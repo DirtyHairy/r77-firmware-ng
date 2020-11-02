@@ -24,6 +24,7 @@ R77. Among many other things you will get:
  The firmware contains many other enhancements over the original, many of which are inherited
  from the original community image by Remowilliams (see above). Among other things:
 
+ * ROM dumps can be saved to the SD card
  * The Hyperkin GUI is replaced with Stella's own launcher
  * There is a dedicated "mini" settings UI for easy acces to the most important settings
  * A command palette that can be opened by pressing 4:3/16:9 (16:9 mode is availabe from
@@ -41,6 +42,23 @@ R77. Among many other things you will get:
 
 **IMPORTANT:** If there is a file called `sys` or `games` on your SD card, the firmware
 will delete it and create a directory in its place.
+
+# Dumping ROMs to SD
+
+The cartridge slot on the R77 is, in fact, a ROM dumper. When you insert a cartridge into the slot,
+the R77 dumps the ROM on the cartridge and then runs it in Stella. In order to keep the dumped ROM,
+this firmware can be configured to store the dumped ROM on the SD card.
+
+Dumping the cartridge ROM to the SD card is enabled by creating a file called `sys/settings` on
+the SD card with the content
+
+```
+DUMP_TO_SD=y
+```
+
+After inserting a cartridge, wait until Stella starts up and plays the game. Now switch off
+the console and put the SD card into a card reader. The dumped ROM is called `rom_dump.bin`
+and can be found in the root directory of the SD card.
 
 # Known issues
 
