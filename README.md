@@ -66,13 +66,10 @@ and can be found in the root directory of the SD card.
 
 # Known issues
 
-This firmware is currently in beta state. There are several known issues:
+Using USB devices (2600-daptor, USB-to-serial dongles) may cause slowdowns in games that require ARM
+emulation (DPC+ / CDF / CDFJ cartridges).
 
-* Enabling the time machine (using an attached keyboard) will exhaust the available RAM and crash Stella
-* Taking repeated PNG snapshots (using an attached keyboard) may exhaust the available RAM,
-  render Stella unstable and crash it
-
-There may be other bugs. Please be sure to report any issues not mentioned here on AtariAge and / or
+Please be sure to report any issues not mentioned here on AtariAge and / or
 open an [issue](https://github.com/DirtyHairy/r77-firmware-ng/issues) on github.
 
 # Disclaimer
