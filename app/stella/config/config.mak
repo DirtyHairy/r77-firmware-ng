@@ -18,7 +18,7 @@ WINDOWSPATH=
 STRIP := arm-linux-gnueabihfstrip
 BINARY_LOADER := qemu-arm -cpu cortex-a7 -L $(ROOTFSDIR)
 
-MODULES +=  src/unix src/unix/r77 src/gui src/common/repository/sqlite
+MODULES +=  src/unix src/unix/r77 src/gui
 MODULE_DIRS +=
 EXEEXT :=
 
@@ -30,9 +30,9 @@ PROFILE :=
 
 HAVE_GCC = 1
 
-INCLUDES += -I$(BUILDDIR)/include -I/$(BUILDDIR)/include/SDL2 -Isrc/emucore -Isrc/common -Isrc/common/tv_filters -Isrc/gui -Isrc/emucore/tia -Isrc/emucore/tia/frame-manager -Isrc/unix -Isrc/unix/r77 -Isrc/common/repository/sqlite -I/usr/local/include/SDL2 -D_THREAD_SAFE
+INCLUDES += -I$(BUILDDIR)/include -I/$(BUILDDIR)/include/SDL2 -Isrc/emucore -Isrc/common -Isrc/common/tv_filters -Isrc/gui -Isrc/emucore/tia -Isrc/emucore/tia/frame-manager -Isrc/unix -Isrc/unix/r77 -Isrc/json -Isrc/common/repository/sqlite -Isrc/sqlite -I/usr/local/include/SDL2 -D_THREAD_SAFE
 OBJS +=
-DEFINES +=  -DUNIX -DBSPF_UNIX -DRETRON77 -DSOUND_SUPPORT -DJOYSTICK_SUPPORT -DSDL_SUPPORT -DGUI_SUPPORT -DPNG_SUPPORT -DZIP_SUPPORT -DSQLITE_SUPPORT
+DEFINES +=  -DUNIX -DBSPF_UNIX -DRETRON77 -DSOUND_SUPPORT -DJOYSTICK_SUPPORT -DSDL_SUPPORT -DGUI_SUPPORT -DPNG_SUPPORT -DZIP_SUPPORT
 LDFLAGS +=
 
 CXX_UPDATE_DEP_FLAG = -MMD -MF "$(*D)/$(DEPDIR)/$(*F).d" -MQ "$@" -MP
