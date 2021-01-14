@@ -11,7 +11,7 @@ ifeq (,$(wildcard $(OUTDIR)/kernel))
 ifeq (,$(wildcard $(KERNEL_CONFIG)))
 	@echo "create kernel .config"
 	@cp kernel/armbian-linux/config/config $(KERNEL_CONFIG)
-	@ln -fs ../rootfs.cpio.gz $(OUTDIR)/kernel
+	@ln -fs ../rootfs.cpio.lzma $(OUTDIR)/kernel
 	@mkdir -p $(OUTDIR)/kernel/arch/arm/mach-sunxi/power/brom/
 	@ln -fs $(TOPDIR)/kernel/armbian-linux/linux-3.4.113/arch/arm/mach-sunxi/power/brom/sun8i_brom_scatter.scat $(OUTDIR)/kernel/arch/arm/mach-sunxi/power/brom/sun8i_brom_scatter.scat
 	@ln -fs $(TOPDIR)/kernel/armbian-linux/linux-3.4.113/arch/arm/mach-sunxi/power/brom/gen_check_code $(OUTDIR)/kernel/arch/arm/mach-sunxi/power/brom/gen_check_code

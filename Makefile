@@ -83,11 +83,11 @@ install:
 	make kernel/armbian-linux/install
 
 cpio:
-	rm -rf $(OUTDIR)/rootfs.cpio.gz
+	rm -rf $(OUTDIR)/rootfs.cpio.lzma
 	cd $(ROOTFSDIR) && \
 	find . | cpio -H newc -o --owner root:root -F ../rootfs.cpio && \
 	cd .. && \
-	gzip rootfs.cpio
+	lzma rootfs.cpio
 
 sdcard:
 	mkdir -p $(OUTDIR)/tmp

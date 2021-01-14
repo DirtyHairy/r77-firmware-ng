@@ -220,56 +220,55 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
           input_sync(input_left);
           //printk("Left Paddle FireB\n");
         }
-      }else{
-        if( g_i2c_key.left.key != old_key.left.key ){
-          if(g_i2c_key.left.u.k0 != old_key.left.u.k0){ //Up
-            if(g_i2c_key.left.u.k0 == 1){
-              input_event(input_left, EV_ABS, ABS_Y, AXIS_CENTER);
-            }else{
-              input_event(input_left, EV_ABS, ABS_Y, AXIS_MIN);
-            }
-            input_sync(input_left);
-            //printk("Left KEY_UP\n");
-          }
-          if(g_i2c_key.left.u.k1 != old_key.left.u.k1){ //Left
-            if(g_i2c_key.left.u.k1 == 1){
-              input_event(input_left, EV_ABS, ABS_X, AXIS_CENTER);
-            }else{
-              input_event(input_left, EV_ABS, ABS_X, AXIS_MIN);
-            }
-            input_sync(input_left);
-            //printk("Left KEY_LEFT\n");
-          }
-          if(g_i2c_key.left.u.k2 != old_key.left.u.k2){ //Down
-            if(g_i2c_key.left.u.k2 == 1){
-              input_event(input_left, EV_ABS, ABS_Y, AXIS_CENTER);
-            }else{
-              input_event(input_left, EV_ABS, ABS_Y, AXIS_MAX);
-            }
-            input_sync(input_left);
-            //printk("Left KEY_DOWN\n");
-          }
-          if(g_i2c_key.left.u.k3 != old_key.left.u.k3){ //Right
-            if(g_i2c_key.left.u.k3 == 1){
-              input_event(input_left, EV_ABS, ABS_X, AXIS_CENTER);
-            }else{
-              input_event(input_left, EV_ABS, ABS_X, AXIS_MAX);
-            }
-            input_sync(input_left);
-            //printk("Left KEY_RIGHT\n");
-          }
-          if(g_i2c_key.left.u.k5 != old_key.left.u.k5){ //Fire
-            if(g_i2c_key.left.u.k5 == 1){
-              input_event(input_left, EV_KEY, BTN_0, 0);
-            }else{
-              input_event(input_left, EV_KEY, BTN_0, 1);
-            }
-            input_sync(input_left);
-            //printk("Left KEY_SPACE\n");
-          }
-        }
       }
 
+      if( g_i2c_key.left.key != old_key.left.key ){
+        if(g_i2c_key.left.u.k0 != old_key.left.u.k0){ //Up
+          if(g_i2c_key.left.u.k0 == 1){
+            input_event(input_left, EV_ABS, ABS_Y, AXIS_CENTER);
+          }else{
+            input_event(input_left, EV_ABS, ABS_Y, AXIS_MIN);
+          }
+          input_sync(input_left);
+          //printk("Left KEY_UP\n");
+        }
+        if(g_i2c_key.left.u.k1 != old_key.left.u.k1){ //Left
+          if(g_i2c_key.left.u.k1 == 1){
+            input_event(input_left, EV_ABS, ABS_X, AXIS_CENTER);
+          }else{
+            input_event(input_left, EV_ABS, ABS_X, AXIS_MIN);
+          }
+          input_sync(input_left);
+          //printk("Left KEY_LEFT\n");
+        }
+        if(g_i2c_key.left.u.k2 != old_key.left.u.k2){ //Down
+          if(g_i2c_key.left.u.k2 == 1){
+            input_event(input_left, EV_ABS, ABS_Y, AXIS_CENTER);
+          }else{
+            input_event(input_left, EV_ABS, ABS_Y, AXIS_MAX);
+          }
+          input_sync(input_left);
+          //printk("Left KEY_DOWN\n");
+        }
+        if(g_i2c_key.left.u.k3 != old_key.left.u.k3){ //Right
+          if(g_i2c_key.left.u.k3 == 1){
+            input_event(input_left, EV_ABS, ABS_X, AXIS_CENTER);
+          }else{
+            input_event(input_left, EV_ABS, ABS_X, AXIS_MAX);
+          }
+          input_sync(input_left);
+          //printk("Left KEY_RIGHT\n");
+        }
+        if(g_i2c_key.left.u.k5 != old_key.left.u.k5){ //Fire
+          if(g_i2c_key.left.u.k5 == 1){
+            input_event(input_left, EV_KEY, BTN_0, 0);
+          }else{
+            input_event(input_left, EV_KEY, BTN_0, 1);
+          }
+          input_sync(input_left);
+          //printk("Left KEY_SPACE\n");
+        }
+      }
 
       if(g_i2c_key.paddle0 != 0 || g_i2c_key.paddle1 != 0){//Right PaddleA/PaddleB
         if((g_i2c_key.paddle0 != 0)){//Right PaddleA
@@ -318,56 +317,56 @@ static void atari_i2c_keys_report_event(struct work_struct *work){
           input_sync(input_right);
           //printk("Right Paddle FireB\n");
         }
-      }else{
-        if( g_i2c_key.right.key != old_key.right.key ){
-          if(g_i2c_key.right.u.k0 != old_key.right.u.k0){ //Up
-            if(g_i2c_key.right.u.k0 == 1){
-              input_event(input_right, EV_ABS, ABS_Y, AXIS_CENTER);
-            }else{
-              input_event(input_right, EV_ABS, ABS_Y, AXIS_MIN);
-            }
-            input_sync(input_right);
-            //printk("Right UP\n");
+      }
+      if( g_i2c_key.right.key != old_key.right.key ){
+        if(g_i2c_key.right.u.k0 != old_key.right.u.k0){ //Up
+          if(g_i2c_key.right.u.k0 == 1){
+            input_event(input_right, EV_ABS, ABS_Y, AXIS_CENTER);
+          }else{
+            input_event(input_right, EV_ABS, ABS_Y, AXIS_MIN);
           }
-          if(g_i2c_key.right.u.k1 != old_key.right.u.k1){ //Left
-            if(g_i2c_key.right.u.k1 == 1){
-              input_event(input_right, EV_ABS, ABS_X, AXIS_CENTER);
-            }else{
-              input_event(input_right, EV_ABS, ABS_X, AXIS_MIN);
-            }
-            input_sync(input_right);
-            //printk("Right LEFT\n");
+          input_sync(input_right);
+          //printk("Right UP\n");
+        }
+        if(g_i2c_key.right.u.k1 != old_key.right.u.k1){ //Left
+          if(g_i2c_key.right.u.k1 == 1){
+            input_event(input_right, EV_ABS, ABS_X, AXIS_CENTER);
+          }else{
+            input_event(input_right, EV_ABS, ABS_X, AXIS_MIN);
           }
-          if(g_i2c_key.right.u.k2 != old_key.right.u.k2){ //Down
-            if(g_i2c_key.right.u.k2 == 1){
-              input_event(input_right, EV_ABS, ABS_Y, AXIS_CENTER);
-            }else{
-              input_event(input_right, EV_ABS, ABS_Y, AXIS_MAX);
-            }
-            input_sync(input_right);
-            //printk("Right DOWN\n");
+          input_sync(input_right);
+          //printk("Right LEFT\n");
+        }
+        if(g_i2c_key.right.u.k2 != old_key.right.u.k2){ //Down
+          if(g_i2c_key.right.u.k2 == 1){
+            input_event(input_right, EV_ABS, ABS_Y, AXIS_CENTER);
+          }else{
+            input_event(input_right, EV_ABS, ABS_Y, AXIS_MAX);
           }
-          if(g_i2c_key.right.u.k3 != old_key.right.u.k3){ //Right
-            if(g_i2c_key.right.u.k3 == 1){
-              input_event(input_right, EV_ABS, ABS_X, AXIS_CENTER);
-            }else{
-              input_event(input_right, EV_ABS, ABS_X, AXIS_MAX);
-            }
-            input_sync(input_right);
-            //printk("Right Right\n");
+          input_sync(input_right);
+          //printk("Right DOWN\n");
+        }
+        if(g_i2c_key.right.u.k3 != old_key.right.u.k3){ //Right
+          if(g_i2c_key.right.u.k3 == 1){
+            input_event(input_right, EV_ABS, ABS_X, AXIS_CENTER);
+          }else{
+            input_event(input_right, EV_ABS, ABS_X, AXIS_MAX);
           }
-          if(g_i2c_key.right.u.k5 != old_key.right.u.k5){ //Fire
-            if(g_i2c_key.right.u.k5 == 1){
-              input_event(input_right, EV_KEY, BTN_0, 0);
-            }else{
-              input_event(input_right, EV_KEY, BTN_0, 1);
-            }
-            input_sync(input_right);
-            //printk("Right Fire\n");
+          input_sync(input_right);
+          //printk("Right Right\n");
+        }
+        if(g_i2c_key.right.u.k5 != old_key.right.u.k5){ //Fire
+          if(g_i2c_key.right.u.k5 == 1){
+            input_event(input_right, EV_KEY, BTN_0, 0);
+          }else{
+            input_event(input_right, EV_KEY, BTN_0, 1);
           }
+          input_sync(input_right);
+          //printk("Right Fire\n");
         }
       }
     }
+
     old_key.left.key = g_i2c_key.left.key;
     old_key.right.key = g_i2c_key.right.key;
   }
