@@ -3,7 +3,8 @@
 CXX := arm-linux-gnueabihf-c++
 CXXFLAGS := $(CFLAGS_HP)
 LD :=  arm-linux-gnueabihf-c++
-LIBS +=  -L$(BUILDDIR)/lib -lSDL2 -lpng -lz -lsqlite3
+LDFLAGS := -march=armv7-a -mtune=cortex-a7 -mfpu=neon-vfpv4
+LIBS +=  -L$(BUILDDIR)/lib -lSDL2 -lpng -lz -pthread
 RANLIB := arm-linux-gnueabihf-ranlib
 INSTALL := install
 AR := arm-linux-gnueabihf-ar cru
