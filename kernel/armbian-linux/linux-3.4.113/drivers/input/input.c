@@ -59,6 +59,7 @@ static inline int is_event_supported(unsigned int code,
 
 static int input_defuzz_abs_event(int value, int old_val, int fuzz)
 {
+	/*
 	if (fuzz) {
 		if (value > old_val - fuzz / 2 && value < old_val + fuzz / 2)
 			return old_val;
@@ -69,6 +70,7 @@ static int input_defuzz_abs_event(int value, int old_val, int fuzz)
 		if (value > old_val - fuzz * 2 && value < old_val + fuzz * 2)
 			return (old_val + value) / 2;
 	}
+	*/
 
 	return value;
 }
