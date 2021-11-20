@@ -6,6 +6,9 @@
 #include <signal.h>
 #include <string.h>
 #include <wait.h>
+#include <sys/stat.h>
+
+#include "md5.h"
 
 enum State {
 	STATE_NO_STELLA,
@@ -100,28 +103,61 @@ void runStella(const char* romfile) {
 	}
 }
 
+const char* romfile_path(unsigned char* rom, int size, const char* destination) {
+	struct stat s;
+	if (stat(destination, &s) != 0 || (s.st_mode & S_IFMT) != S_IFDIR) return destination;
+
+	MD5_CTX md5_ctx;
+	MD5_Init(&md5_ctx);
+	MD5_Update(&md5_ctx, rom, size);
+
+	unsigned char md5[16];
+	MD5_Final(md5, &md5_ctx);
+
+	unsigned char md5_string[33];
+	static unsigned const char HEX[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
+	for (int i = 0; i < 16; i++) {
+		md5_string[2*i] = HEX[md5[i] >> 4];
+		md5_string[2*i + 1] = HEX[md5[i] & 0x0f];
+	}
+	md5_string[32] = 0;
+
+	static char* path = NULL;
+	static size_t path_maxlen;
+	if (path == NULL)
+	{
+		path_maxlen = strlen(destination) + 64;
+		path = malloc(path_maxlen);
+	}
+
+	snprintf(path, path_maxlen, "%s/rom_%s.bin", destination, md5_string);
+
+	return path;
+}
+
 int main(int argc, char** argv){
 	if (argc != 2) {
-		fprintf(stderr, "usage: dumper <romfile>\n");
+		fprintf(stderr, "usage: dumper <destination>\n");
 		exit(1);
 	}
 
-	const char* romfile = argv[1];
+	const char* destination = argv[1];
 
 	int cartridge_len = 4 * 1024;
 	int ret = 0;
 
-	unsigned char buf[128 * 1024];
+	unsigned char buf[32 * 1024];
 
 	printf("Atari Dumper\n");
 	OpenMCU();
-	memset(buf, 0, 128 * 1024);
+	memset(buf, 0, 32 * 1024);
 
 	write(tty_fd, status_cmd, 4); //send read status, for first time booting
 
 	while (1)
 	{
-		memset(buf, 0, 128 * 1024);
+		memset(buf, 0, 32 * 1024);
 		read(tty_fd, buf, 4);//MCU will auto generate status data when plug/unplug
 
 		if(*(buf + 2) == 0){
@@ -160,48 +196,43 @@ int main(int argc, char** argv){
 				break;
 		}
 
-		int receive_count = 0, buf_index = 0, write_count = 0;
-		unsigned char* buf2 = buf;
+		int receive_count = 0, buf_index = 0;
+		unsigned char receive_buf[70];
 
-		unlink(romfile);
-		sync();
-
-		FILE* rom = fopen(romfile, "w");
-
-		memset(buf, 0, 128 * 1024);
+		memset(buf, 0, 32 * 1024);
 		write(tty_fd, reset_cmd, 4); //send reset command
 		write(tty_fd, send_cmd, 4); //send read data command
+
 		while (1) {
-			ret = ReadMCU(buf2, 70);
+			ret = ReadMCU(receive_buf + buf_index, 70);
 			if(ret < 0) break;
+
 			buf_index += ret;
-			receive_count += ret;
-			buf2 += ret;
+
 			if(buf_index == 70){
-				fwrite(buf + 4, 70 - 6, 1, rom);
-				memset(buf, 0, 128 * 1024);
+				memcpy(buf + receive_count, receive_buf + 4, 64);
+				receive_count += 64;
+
 				buf_index = 0;
-				buf2 = buf;
-				write_count += 64;
 			}
-			if(write_count >= cartridge_len)
+
+			if(receive_count >= cartridge_len)
 				break;
 		}
 
-		fclose(rom);
-		sync();
-
 		if(ret < 0){
-			printf("error occurs, drop execution stella\n");
-
-			unlink(romfile);
-			sync();
+			printf("failed to receive ROM, dropping to Stella\n");
 
 			runStella(NULL);
 			continue;
 		}
 
-		printf("Total receive data = %d, write_count = %d\n", receive_count, write_count);
+		const char* romfile = romfile_path(buf, receive_count, destination);
+
+		FILE* file = fopen(romfile, "w");
+		fwrite(buf, 1, receive_count, file);
+		fclose(file);
+		sync();
 
 		runStella(romfile);
 	}

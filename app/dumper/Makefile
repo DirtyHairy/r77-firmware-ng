@@ -6,7 +6,7 @@ dumper:
 app/dumper/compile: app/dumper/dumper.c
 	@echo "dumper compile"
 	cd app/dumper && \
-	$(GCC) -o dumper dumper.c $(CFLAGS)
+	$(GCC) -o dumper dumper.c md5.c $(CFLAGS)
 	make app/dumper/install
 
 app/dumper/install:
