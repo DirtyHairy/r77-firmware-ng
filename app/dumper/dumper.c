@@ -131,7 +131,7 @@ const char* romfile_path(unsigned char* rom, int size, const char* destination) 
 		path = malloc(path_maxlen);
 	}
 
-	snprintf(path, path_maxlen, "%s/rom_%s.bin", destination, md5_string);
+	snprintf(path, path_maxlen, "%s/rom-%s.bin", destination, md5_string);
 
 	return path;
 }
