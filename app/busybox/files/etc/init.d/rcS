@@ -78,7 +78,7 @@ fi
 
 DUMPFILE="/tmp/rom_dump.bin"
 if test -n "$DUMP_TO_SD"; then
-    DUMPFILE="/mnt/rom_dump.bin"
+    DUMPFILE="/mnt"
 fi
 
 /usr/bin/dumper "$DUMPFILE" &
