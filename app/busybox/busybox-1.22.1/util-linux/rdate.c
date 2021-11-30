@@ -67,9 +67,13 @@ int rdate_main(int argc UNUSED_PARAM, char **argv)
 		time(&current_time);
 		if (current_time == remote_time)
 			bb_error_msg("current time matches remote time");
-		else
-			if (stime(&remote_time) < 0)
+		else {
+			struct timespec ts;
+			ts.tv_sec = remote_time;
+			ts.tv_nsec = 0;
+			if (clock_settime(CLOCK_REALTIME, &ts) < 0)
 				bb_perror_msg_and_die("can't set time of day");
+		}
 	}
 
 	if (flags != 1) /* not lone -s */

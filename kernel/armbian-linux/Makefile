@@ -22,7 +22,7 @@ endif
 endif
 	@echo "Compiling kernel"
 	cd kernel/armbian-linux/linux-3.4.113/ && \
-	make -j$(CORES) O=$(OUTDIR)/kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILE} uImage V=$(VERBOSE)
+	make -j$(CORES) O=$(OUTDIR)/kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILE} KCFLAGS="-Wno-attributes" uImage V=$(VERBOSE)
 
 kernel/armbian-linux/menuconfig:
 	@echo "kernel menuconfig"

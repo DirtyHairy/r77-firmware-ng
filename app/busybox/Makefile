@@ -45,12 +45,22 @@ app/busybox/install:
 	shopt -s nullglob; for libname in $(ROOTFS_LIBS); do \
 	    lib=`echo $(BUILDDIR)/lib/$${libname}.so.[0-9]` \
 	    lib="$${lib##*/}"; \
-	    cp -L $(BUILDDIR)/lib/$$lib $(ROOTFSDIR)/lib; \
-	    $(STRIP) $(ROOTFSDIR)/lib/$$lib; \
+	    test -n "$$lib" && cp -L $(BUILDDIR)/lib/$$lib $(ROOTFSDIR)/lib || true; \
+	    test -n "$$lib" && $(STRIP) $(ROOTFSDIR)/lib/$$lib || true; \
 	    for link in `echo $(BUILDDIR)/lib/$${libname}-*.so`; do \
-	        ln -fs $$lib "$(ROOTFSDIR)/lib/$${link##*/}"; \
+	        test -n "$$lib" && ln -fs $$lib "$(ROOTFSDIR)/lib/$${link##*/}" || true; \
 	    done; \
-        done	    
+        done
+
+	shopt -s nullglob; for libname in $(ROOTFS_LIBS); do \
+	    lib=`echo $(BUILDDIR)/usr/lib/$${libname}.so.[0-9]` \
+	    lib="$${lib##*/}"; \
+	    test -n "$$lib" && cp -L $(BUILDDIR)/usr/lib/$$lib $(ROOTFSDIR)/lib || true; \
+	    test -n "$$lib" && $(STRIP) $(ROOTFSDIR)/lib/$$lib || true; \
+	    for link in `echo $(BUILDDIR)/lib/$${libname}-*.so`; do \
+	        test -n "$$lib" &&  ln -fs $$lib "$(ROOTFSDIR)/lib/$${link##*/}" || true; \
+	    done; \
+        done
 
 	ln -fs libc.so.6 $(ROOTFSDIR)/lib/libc.s
 

@@ -8,7 +8,8 @@ ifeq (,$(wildcard $(SQLITE_MAKEFILE)))
 	cd $(SQLITE_WORKDIR) && $(SQLITE_DIR)/configure \
 		CFLAGS="$(CFLAGS)" \
 		LDFLAGS="$(LDFLAGS)" \
-		--host=arm-linux \
+		--host=arm-none-linux-gnueabihf \
+		--build=amd64-linux-gnu \
 		--prefix=$(BUILDDIR)
 endif
 	make -j$(CORES) -C$(SQLITE_WORKDIR)

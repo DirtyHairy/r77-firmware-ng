@@ -10,7 +10,7 @@ OUT_SDK_DIR:=$(BUILDDIR)/usr
 WORKDIR_BASE := $(OUTDIR)/build
 
 ARCH:=arm
-CROSS_COMPILE:=arm-linux-gnueabihf-
+CROSS_COMPILE:=arm-none-linux-gnueabihf-
 CC:=${CROSS_COMPILE}gcc
 GCC:=${CROSS_COMPILE}gcc
 CPP:=${CROSS_COMPILE}cpp
