@@ -318,6 +318,19 @@ static int uinput_validate_absbits(struct input_dev *dev)
 			retval = -EINVAL;
 			break;
 		}
+
+		if (input_abs_get_flat(dev, cnt) >
+		    input_abs_get_max(dev, cnt) - input_abs_get_min(dev, cnt)) {
+			printk(KERN_DEBUG
+				"%s: abs_flat #%02x out of range: %d "
+				"(min:%d/max:%d)\n",
+				UINPUT_NAME, cnt,
+				input_abs_get_flat(dev, cnt),
+				input_abs_get_min(dev, cnt),
+				input_abs_get_max(dev, cnt));
+			retval = -EINVAL;
+			break;
+		}
 	}
 	return retval;
 }

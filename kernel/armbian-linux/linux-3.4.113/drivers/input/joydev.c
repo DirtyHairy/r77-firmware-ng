@@ -863,7 +863,8 @@ static int joydev_connect(struct input_handler *handler, struct input_dev *dev,
 		joydev->corr[i].coef[0] = t;
 		joydev->corr[i].coef[1] = t;
 
-		t = (input_abs_get_max(dev, j) - input_abs_get_min(dev, j)) / 2;
+		t = (input_abs_get_max(dev, j) - input_abs_get_min(dev, j)) / 2
+			- 2 * input_abs_get_flat(dev, j);
 		if (t) {
 			joydev->corr[i].coef[2] = (1 << 29) / t;
 			joydev->corr[i].coef[3] = (1 << 29) / t;
