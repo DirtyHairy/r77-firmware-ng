@@ -1,5 +1,13 @@
 # Changelog
 
+# 6.6.0
+
+ * Keep multiple dump files when dumping to SD.
+ * Add opt-out for overclocking
+ * Update Stella
+ * Remove deadzone from joystick
+ * Switch to GCC10
+
 ## 6.1.2
 
  * Update Stella to 6.1.2
