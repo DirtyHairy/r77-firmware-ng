@@ -83,7 +83,7 @@ in a well-ventillated area (not under a stack of books). If the temperature gets
 just throttle the clock and get slower but, again, **you are using this at your own risk**.
 
 You can disable overclocking by setting `DONT_OVERCLOCK` (see below). This may stop consoles with buggy
-hardware from crashing, but you will get audio jittering in very demanding (DPC+,CDF) games.
+hardware from crashing, but you will get audio jitter and frame drops in demanding games.
 
 # Hacking the firmware
 
@@ -218,8 +218,8 @@ firmware by settings shell variables. Supported variables:
  * `WAIT_FOR_ETH0`: Don't just delay, but wait indefinitely until `eth0` is available
    before continuing boot (and bringing up the network).
  * `DONT_OVERCLOCK`: This keeps the CPU frequency at 1GHz instead of overclocking it to 1.2GHz.
-   This may stop consoles with buggy hardware from crashing, but you will get audio jittering
-   in very demanding (DPC+,CDF) games.
+   This may stop consoles with buggy hardware from crashing, but you will get audio jitter
+   and frame drops in demanding games.
 
 # License
 
