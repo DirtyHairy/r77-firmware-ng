@@ -116,15 +116,32 @@ You do not have to read them if you just want to use the firmware for playing.
 The `master` branch is where development for Stella 6 happens. If you want to
 build stable firmware for Stella 3.x, use the `stella-3.x` branch.
 
-## Setup
+## Docker build environment
 
-### Docker build environment
+The easiest way to build the firmware is the docker container at
+https://hub.docker.com/repository/docker/cnspeckn/r77-firmware-ng-build .
 
-You can use this
-[Dockerfile](https://github.com/DirtyHairy/r77-firmware-ng-build/tree/master)
-to set up a preconfigured build environment.
-This environment is based upon Debian stretch and contains all dependencies
-required for building the firmware (including the toolchain and qemu-user).
+In order to do a release build, start the container and run
+
+```
+$ git pull
+§ git submodule update
+$ make RELEASE=1
+```
+
+Including `RELEASE=1` will build Stella with PGO (profile guided optimisation).
+This gives a considerable speed boost at the expense of increased build time.
+The last build step (creating the SD card image) will fail unless the container
+is started as `--privileged`, but the `uImage` will be created and can be used
+in any case.
+
+The container is available for both `x86_64` and `arm64`. The ARM container runs
+on Apple Silicon Macs. If you want to build on ARM Linux you need `binfmt_misc`
+and `qemu-user` set up for userspace `x86_64` emulation (as the build relies on
+a propietary binary-only tool from Allwinner). The container is built from the
+`Dockerfile`  at https://github.com/DirtyHairy/r77-firmware-ng-build .
+
+## Manual build environment
 
 ### Git submodules
 
@@ -137,14 +154,15 @@ those after checkout, run
 
 ### Toolchain
 
-You'll need the
-[gcc 7.4 gnueabihf toolchain](http://releases.linaro.org/components/toolchain/binaries/7.4-2019.02/arm-linux-gnueabihf/)
-from Linaro in order to build the firmware. The build
-system expects the toolchain at `toolchain/toolchain` and the sysroot at
-`toolchain/sysroot-glibc`. As an alternative, you can set the `TOOLCHAIN`
-environment variable to point to the directory containing toolchain and sysroot.
+You'll need the [gcc 10 A-profile
+toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-a/downloads)
+from ARM in order to build the firmware. The build system expects the toolchain
+at `toolchain/toolchain`. The sysroot is located in the `libc` subdirectory of
+the toolchain and needs to be symlinked to `toolchain/sysroot-libc`. As an
+alternative, you can set the `TOOLCHAIN` environment variable to point to the
+directory containing toolchain and sysroot.
 
-## Build
+### Build
 
 Presuming that all dependencies (including the toolchain) have been installed,
 the build is executed via `make RELEASE=1` (for a release build) or `make`
