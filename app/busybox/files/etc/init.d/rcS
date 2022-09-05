@@ -29,6 +29,13 @@ if test -z "$DONT_OVERCLOCK"; then
     done
 fi
 
+if test -e /mnt/memtest; then
+    echo '#!/bin/sh' > /tmp/modprobe
+    chmod 755 /tmp/modprobe
+    PATH="/tmp:$PATH" /bin/lima-memtester 35M
+    while true; do sleep 1; done
+fi
+
 if test -e /mnt/developer; then
     echo > "$LOGFILE"
 

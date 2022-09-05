@@ -27,6 +27,7 @@ all:
 	make app/sftpserver/compile
 	make app/stella/compile
 	make app/dumper/compile
+	make lima-memtester
 	make cpio
 	make kernel/armbian-linux/compile
 	make sdcard
@@ -84,6 +85,9 @@ cpio:
 	cd .. && \
 	lzma rootfs.cpio
 
+lima-memtester:
+	install -m 0755 bin/lima-memtester $(ROOTFSDIR)/bin
+
 sdcard:
 	mkdir -p $(OUTDIR)/tmp
 	rm -rf $(OUTDIR)/sdcard.img
@@ -102,4 +106,7 @@ sdcard:
 	sudo sync
 	sudo umount -f $(OUTDIR)/tmp/
 	sudo losetup -d /dev/loop7
-	@echo "\033[1;31m[SDCard Image Created: $(OUTDIR)/sdcard.img]\033[0m"
+	for i in 408 480 504; do \
+		cp $(OUTDIR)/sdcard.img $(OUTDIR)/sdcard-$${i}mhz.bin; \
+		dd if=bin/uboot-$${i}mhz.bin of=$(OUTDIR)/sdcard-$${i}mhz.bin bs=1k seek=8 conv=notrunc; \
+	done
